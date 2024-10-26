@@ -1,6 +1,6 @@
 CC = gcc
-CFLAGS = -O2
-LDFLAGS =
+CFLAGS = -O2 -fopenmp
+LDFLAGS = -fopenmp
 TARGET = array_processing
 
 SRC = main.c
