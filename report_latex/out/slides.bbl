@@ -1,0 +1,77 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nty/global//global/global/global}
+    \entry{chang95}{article}{}{}
+      \name{author}{5}{}{%
+        {{hash=7b170c15c473061cbcdee374c2d33c54}{%
+           family={Chang},
+           familyi={C\bibinitperiod},
+           given={P.P.},
+           giveni={P\bibinitperiod}}}%
+        {{hash=9ff623566af7b6fac93823256e8895de}{%
+           family={Warter},
+           familyi={W\bibinitperiod},
+           given={N.F.},
+           giveni={N\bibinitperiod}}}%
+        {{hash=bb53ae593504d4251a54914693f0ed77}{%
+           family={Mahlke},
+           familyi={M\bibinitperiod},
+           given={S.A.},
+           giveni={S\bibinitperiod}}}%
+        {{hash=15aef8eec06f7dad4729b9309151746c}{%
+           family={Chen},
+           familyi={C\bibinitperiod},
+           given={W.Y.},
+           giveni={W\bibinitperiod}}}%
+        {{hash=216530256c67638bf493686f668b22ae}{%
+           family={Hwu},
+           familyi={H\bibinitperiod},
+           given={W.W.},
+           giveni={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{cb174f32fc35365d901c425a4cf71186}
+      \strng{fullhash}{46b9281353470929b3ded609a34a74d5}
+      \strng{fullhashraw}{46b9281353470929b3ded609a34a74d5}
+      \strng{bibnamehash}{cb174f32fc35365d901c425a4cf71186}
+      \strng{authorbibnamehash}{cb174f32fc35365d901c425a4cf71186}
+      \strng{authornamehash}{cb174f32fc35365d901c425a4cf71186}
+      \strng{authorfullhash}{46b9281353470929b3ded609a34a74d5}
+      \strng{authorfullhashraw}{46b9281353470929b3ded609a34a74d5}
+      \field{sortinit}{C}
+      \field{sortinithash}{4d103a86280481745c9c897c925753c0}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Computers}
+      \field{number}{4}
+      \field{title}{Three architectural models for compiler-controlled speculative execution}
+      \field{volume}{44}
+      \field{year}{1995}
+      \field{pages}{481\bibrangedash 494}
+      \range{pages}{14}
+      \verb{doi}
+      \verb 10.1109/12.376164
+      \endverb
+      \keyw{Processor scheduling;Hazards;Dynamic scheduling;Hardware;Boosting;Performance analysis;Pipeline processing;Parallel processing;Reliability engineering;Buffer storage}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+
