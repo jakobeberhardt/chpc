@@ -576,6 +576,17 @@ INPUT ./src/listing/ls_analyze_block.tex
 INPUT ./src/listing/ls_analyze_block.tex
 INPUT ./src/listing/ls_analyze_block.tex
 INPUT src/listing/ls_analyze_block.tex
+INPUT ./src/figure/triangle_branch.tex
+INPUT ./src/figure/triangle_branch.tex
+INPUT ./src/figure/triangle_branch.tex
+INPUT ./src/figure/triangle_branch.tex
+INPUT src/figure/triangle_branch.tex
+INPUT ./src/listing/ls_predication_size.tex
+INPUT ./src/listing/ls_predication_size.tex
+INPUT src/listing/ls_predication_size.tex
+INPUT ./src/figure/triangle_converted.tex
+INPUT ./src/figure/triangle_converted.tex
+INPUT src/figure/triangle_converted.tex
 INPUT ./src/listing/ls_predication_cost.tex
 INPUT ./src/listing/ls_predication_cost.tex
 INPUT ./src/listing/ls_predication_cost.tex

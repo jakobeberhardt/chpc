@@ -1,0 +1,16 @@
+\begin{lstlisting}[style=CStyle]
+unsigned NumPredicatedInstructions = 0;
+
+// Count instructions to be predicated in the true block
+for (auto &I : make_range(TIB, TIE)) {  // TIB and TIE mark the range
+    NumPredicatedInstructions++;
+}
+
+// Count instructions to be predicated in the false block
+for (auto &I : make_range(FIB, FIE)) {  // FIB and FIE mark the range
+    NumPredicatedInstructions++;
+}
+
+if (NumPredicatedInstructions > 15)
+  // Do not predicate
+\end{lstlisting}

@@ -1,8 +1,11 @@
-\contentsline {figure}{\numberline {1}{\ignorespaces Trace with Side Entrance}}{5}{figure.caption.11}%
-\contentsline {figure}{\numberline {2}{\ignorespaces Superblock Example}}{5}{figure.caption.12}%
-\contentsline {figure}{\numberline {3}{\ignorespaces Replacing a conditional branch with arithmetic operations.}}{7}{figure.caption.19}%
-\contentsline {figure}{\numberline {4}{\ignorespaces Branching versus predication in ARM assembly}}{8}{figure.caption.20}%
-\contentsline {figure}{\numberline {5}{\ignorespaces Bit-level encoding of \texttt {ARMv7}'s \texttt {MOVGT} (on top) and of \texttt {MOV} (on the bottom) instructions, illustrating fields for condition codes, opcode, status bit, register operands, and operand values.}}{9}{figure.caption.21}%
+\contentsline {figure}{\numberline {1}{\ignorespaces Trace with Side Entrance}}{6}{figure.caption.11}%
+\contentsline {figure}{\numberline {2}{\ignorespaces Superblock Example}}{6}{figure.caption.12}%
+\contentsline {figure}{\numberline {3}{\ignorespaces Replacing a conditional branch with arithmetic operations.}}{8}{figure.caption.19}%
+\contentsline {figure}{\numberline {4}{\ignorespaces Branching versus predication in ARM assembly}}{9}{figure.caption.20}%
+\contentsline {figure}{\numberline {5}{\ignorespaces Bit-level encoding of \texttt {ARMv7}'s \texttt {MOVGT} (on top) and of \texttt {MOV} (on the bottom) instructions, illustrating fields for condition codes, opcode, status bit, register operands, and operand values.}}{10}{figure.caption.21}%
 \contentsline {figure}{\numberline {6}{\ignorespaces Simplified version of \textit {LLVM}'s \texttt {AnalyzeBlock} implementation for \texttt {ARM} architectures.}}{11}{figure.caption.22}%
-\contentsline {figure}{\numberline {7}{\ignorespaces Portion of code where the cost of predicating a Basic Block is calculated in \textit {LLVM}.}}{12}{figure.caption.23}%
-\contentsline {figure}{\numberline {8}{\ignorespaces \textit {LLVM}'s \texttt {isProfitableToIfCvt} implementation for \texttt {ARM} architectures.}}{13}{figure.caption.24}%
+\contentsline {figure}{\numberline {7}{\ignorespaces The C++ code on the left, has a EBB, a TBB and a fall through FBB. When compiled it gives origin to the triangular branch on the right.}}{12}{figure.caption.23}%
+\contentsline {figure}{\numberline {8}{\ignorespaces Logic used in \textit {LLVM} to decide if a block is too big to be predicated.}}{12}{figure.caption.24}%
+\contentsline {figure}{\numberline {9}{\ignorespaces Comparison of assembly code and control flow graphs (CFGs) for \texttt {triangleBranch}: original code with branching versus optimized code with predication, demonstrating CFG simplification.}}{13}{figure.caption.25}%
+\contentsline {figure}{\numberline {10}{\ignorespaces Portion of code where the cost of predicating a Basic Block is calculated in \textit {LLVM}.}}{14}{figure.caption.26}%
+\contentsline {figure}{\numberline {11}{\ignorespaces \textit {LLVM}'s \texttt {isProfitableToIfCvt} implementation for \texttt {ARM} architectures.}}{14}{figure.caption.27}%

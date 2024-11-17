@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.1)  17 NOV 2024 12:19
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.11.1)  17 NOV 2024 22:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1345,7 +1345,13 @@ Package biblatex Info: Reference segment=0 on input line 9.
 \tf@lol=\write7
 \openout7 = `report.lol'.
 
- (out/report.lof)
+ (out/report.lof
+Overfull \hbox (20.6475pt too wide) in paragraph at lines 9--9
+ [][] [][]\OT1/cmr/m/n/10 Comparison of as-sem-bly code and con-trol flow graph
+s (CFGs) for \OT1/cmtt/m/n/10 triangleBranch\OT1/cmr/m/n/10 : 
+ []
+
+)
 \tf@lof=\write8
 \openout8 = `report.lof'.
 
@@ -1361,21 +1367,23 @@ been already used, duplicate ignored
 <to be read again> 
                    \relax 
 l.24 \newpage
-              [1] (./introduction.tex (./src/table/tab_penalties_1.tex)
+              [1]
 
-[2]
+[2] (./introduction.tex (./src/table/tab_penalties_1.tex)
 
-LaTeX Warning: Reference `' on page 3 undefined on input line 25.
+[3]
 
-
-LaTeX Warning: Reference `' on page 3 undefined on input line 25.
-
-
-LaTeX Warning: Reference `' on page 3 undefined on input line 25.
+LaTeX Warning: Reference `' on page 4 undefined on input line 25.
 
 
+LaTeX Warning: Reference `' on page 4 undefined on input line 25.
 
-[3{/opt/texlive/texdir/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}])
+
+LaTeX Warning: Reference `' on page 4 undefined on input line 25.
+
+
+
+[4{/opt/texlive/texdir/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc}])
 (./speculation.tex (./src/listing/ls_c_intro_example.tex
 (/opt/texlive/texdir/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
@@ -1398,21 +1406,21 @@ File: lstlang2.sty 2024/09/23 1.10c listings language file
 File: lstlang3.sty 2024/09/23 1.10c listings language file
 ))
 (./src/listing/ls_asm_intro_example_spec_load.tex)
-<assets/placeholder.png, id=171, 225.84375pt x 225.84375pt>
+<assets/placeholder.png, id=180, 225.84375pt x 225.84375pt>
 File: assets/placeholder.png Graphic file (type png)
 <use assets/placeholder.png>
 Package pdftex.def Info: assets/placeholder.png  used on input line 50.
 (pdftex.def)             Requested size: 39.83629pt x 39.83684pt.
 
 
-[4]
+[5]
 File: assets/placeholder.png Graphic file (type png)
 <use assets/placeholder.png>
 Package pdftex.def Info: assets/placeholder.png  used on input line 61.
 (pdftex.def)             Requested size: 39.83629pt x 39.83684pt.
 
 
-[5 <./assets/placeholder.png>] (./src/listing/ls_downwardmotion_default.tex)
+[6 <./assets/placeholder.png>] (./src/listing/ls_downwardmotion_default.tex)
 Underfull \hbox (badness 1168) in paragraph at lines 78--78
 \OT1/cmr/m/n/10 branch tar-get of the \OT1/cmtt/m/n/10 BEQ \OT1/cmr/m/n/10 in-s
 truc-tion,
@@ -1421,7 +1429,7 @@ truc-tion,
 (./src/listing/ls_downward_motion.tex) (./src/listing/ls_default_upmotion.tex)
 (./src/listing/ls_faulty_upmotion.tex)
 
-[6]) (./predication.tex (./src/figure/arithmetic_predication.tex
+[7]) (./predication.tex (./src/figure/arithmetic_predication.tex
 (/opt/texlive/texdir/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2024/09/23 1.10c listings language file
 )
@@ -1429,38 +1437,45 @@ LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <9> not available
 (Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 4.
 )
 
-[7]
+[8]
 Underfull \hbox (badness 10000) in paragraph at lines 32--33
 
  []
 
 (./src/figure/branch_vs_predication.tex)
 
-[8] (./src/figure/fig_movgt.tex) (./src/figure/fig_mov.tex)
-Underfull \hbox (badness 10000) in paragraph at lines 75--77
+[9] (./src/figure/fig_movgt.tex) (./src/figure/fig_mov.tex)
+Underfull \hbox (badness 10000) in paragraph at lines 75--76
 
  []
 
 (./src/listing/itanium_mov.tex)
 
-[9] (./src/listing/ls_analyze_block.tex)
+[10] (./src/listing/ls_analyze_block.tex)
 
-[10]
-Overfull \hbox (27.8002pt too wide) in paragraph at lines 108--112
+[11]
+Overfull \hbox (27.8002pt too wide) in paragraph at lines 107--111
 \OT1/cmr/m/n/10 It eval-u-ates branches and records suc-ces-sors to de-ter-mine
  if the block is suit-able for \OT1/cmtt/m/n/10 if-conversion\OT1/cmr/m/n/10 .
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 107--111
 
-[11] (./src/listing/ls_predication_cost.tex)
-(./src/listing/ls_predication_heuristic.tex)
+ []
 
-[12]
+(./src/figure/triangle_branch.tex) (./src/listing/ls_predication_size.tex)
 
-[13])
+[12] (./src/figure/triangle_converted.tex)
+(./src/listing/ls_predication_cost.tex)
+
+[13] (./src/listing/ls_predication_heuristic.tex)
 
 [14]
+
+[15])
+
+[16]
 Overfull \hbox (14.53539pt too wide) in paragraph at lines 38--38
 \OT1/cmr/m/n/10 Mea-sure-ments, Op-por-tu-ni-ties, and Fu-ture Di-rec-tions''. 
 In: \OT1/cmr/m/it/10 arXiv preprint arXiv:1906.08170
@@ -1468,7 +1483,7 @@ In: \OT1/cmr/m/it/10 arXiv preprint arXiv:1906.08170
 
 
 
-[15] (out/report.aux)
+[17] (out/report.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-10-09>
@@ -1478,19 +1493,19 @@ L3 programming layer <2024-10-09>
 LaTeX Warning: There were undefined references.
 
 Package rerunfilecheck Info: File `report.out' has not changed.
-(rerunfilecheck)             Checksum: 278E17B84DC5BB6BC834D23E2E1E2775;2651.
+(rerunfilecheck)             Checksum: 29BA22C51010510BBDBB2D64782409E5;2452.
 Package logreq Info: Writing requests to 'report.run.xml'.
 \openout1 = `report.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 50089 strings out of 473577
- 1162429 string characters out of 5730208
- 2289167 words of memory out of 5000000
- 72026 multiletter control sequences out of 15000+600000
+ 50256 strings out of 473577
+ 1165337 string characters out of 5730208
+ 2275626 words of memory out of 5000000
+ 72126 multiletter control sequences out of 15000+600000
  565712 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 104i,18n,110p,1199b,1875s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 104i,18n,110p,1199b,1877s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </opt/texlive/texdir/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></o
 pt/texlive/texdir/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></opt/te
 xlive/texdir/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></opt/texliv
@@ -1505,10 +1520,10 @@ fonts/cm/cmtt12.pfb></opt/texlive/texdir/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmtt8.pfb></opt/texlive/texdir/texmf-dist/fonts/type1/public/amsfonts/cm/cm
 tt9.pfb></opt/texlive/texdir/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pf
 b>
-Output written on out/report.pdf (16 pages, 251943 bytes).
+Output written on out/report.pdf (18 pages, 263602 bytes).
 PDF statistics:
- 553 PDF objects out of 1000 (max. 8388607)
- 500 compressed objects within 5 object streams
- 232 named destinations out of 1000 (max. 500000)
- 138 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 639 PDF objects out of 1000 (max. 8388607)
+ 583 compressed objects within 6 object streams
+ 290 named destinations out of 1000 (max. 500000)
+ 130 words of extra memory for PDF output out of 10000 (max. 10000000)
 

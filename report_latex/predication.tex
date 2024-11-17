@@ -1,7 +1,7 @@
 \section{Predication}
 \label{sec:predication}
 
-For the reasons outlined in Section \ref{sec:costo_of_branch_prediction}, we can conclude that branches are expensive. Even when using state of the art branch predictors, certain branches are systematically hard to predict or have such low occurrences that not enough data are collected to perform a good prediction \cite{lin2019branch}. 
+For the reasons outlined in Section \ref{sec:costo_of_branch_prediction}, we can conclude that branches are expensive. Even when using state of the art branch predictors, certain branches are systematically hard to predict or have such low occurrences that not enough data are collected to perform a good prediction \cite{lin2019branch}.
 Predication is used to replace conditional branches with other instructions. In \textit{LLVM} and in \textit{GCC}, this is usually done during the backend optimization phase where the compiler works on the machine level representation of the code. The name that is generally given to this code optimization pass is \texttt{if-conversion}.
 
 \begin{figure}[h!]
@@ -38,7 +38,7 @@ The \armvs architecture supports several predicated instructions. For example, t
 \label{fig:branching_predication_ARM}
 \end{figure}
 
-In Figure \ref{fig:branching_predication_ARM} two assembly translation of the code in Figure \ref{fig:branching_predication_example} are displayed. The top one is when no predication is used, while the bottom one uses predicated instructions. 
+In Figure \ref{fig:branching_predication_ARM} two assembly translation of the code in Figure \ref{fig:branching_predication_example} are displayed. The top one is when no predication is used, while the bottom one uses predicated instructions.
 By comparing the two versions in Figure \ref{fig:branching_predication_ARM}, the benefits of predication are staggering. The code size is reduced from 5 instructions to 3, while removing one conditional branch and one unconditional branch. Another benefit that is outlined by this example is \textbf{Deterministic Execution}. It's difficult to predict how many cycles an assembly code needs to be executed when branch predictions and other form of speculations are involved. As we removed all the branches and as we have no memory accesses in our snippet of code, we can determine exactly how long it's going to take to execute the operation. Deterministic Execution is crucial in certain fields where software needs to have a predictable behavior and respond within strict timing constraints. This is necessary for instance in flight control systems, in medical devices and other mission-critical software.
 Section \ref{sec:arch_support} focuses on a more in depth analysis of how \armvs and \texttt{IA64} architectures introduce support for predication.
 
@@ -61,9 +61,9 @@ Finally, in Subsection \ref{sec:predication_benchmark}, a series of micro benchm
 Various ways to support predication at ISA level have been developed.
 
 In the case of \armvs, predication is achieved through condition flags in the \textit{Program Status Register} (PSR) and the instruction’s condition field,
-This is a special register used to set various bits which describe the execution state, among these bits, there are the Zero (Z), Negative (N), Carry (C), and Overflow (V) bits which are set whenever an arithmetic instruction is executed. 
+This is a special register used to set various bits which describe the execution state, among these bits, there are the Zero (Z), Negative (N), Carry (C), and Overflow (V) bits which are set whenever an arithmetic instruction is executed.
 When the CPU encounters a predicated instruction, it evaluates the condition field against the current PSR flags. If the condition is met, the instruction executes; otherwise, it is treated as a no-op.
- 
+
 \begin{figure}[H]
     \centering
     \input{src/figure/fig_movgt}
@@ -72,10 +72,9 @@ When the CPU encounters a predicated instruction, it evaluates the condition fie
     \label{fig:mov_encoding}
 \end{figure}
 
-In Figure \ref{fig:mov_encoding} we can observe how \texttt{MOV} and \texttt{MOVG} bit encoding only differ for the first 4 bits.
-The condition field in \armvs applies to almost all instructions. In ARM’s architecture, most instructions have a 4-bit condition field. This makes non predicated instructions a particular case of predication where the condition field is set to \texttt{1110}. \\
+In Figure \ref{fig:mov_encoding} we can observe how \texttt{MOV} and \texttt{MOVG} bit encoding only differ for the first 4 bits. The condition field in \armvs applies to almost all instructions. In ARM's architecture, most instructions have a 4-bit condition field. This makes non predicated instructions a particular case of predication where the condition field is set to \texttt{1110}. \\
 
-Another architecture design that offer predication support is the Itanium \texttt{IA-64}. 
+Another architecture design that offer predication support is the Itanium \texttt{IA-64}.
 The \texttt{IA-64} has 64 predicate registers (\texttt{p0} to \texttt{63}) that allow each instruction to be conditionally executed based on specific predicate values. Each instruction can specify a predicate register, offering highly granular control over conditional execution. Thanks to this approach, entire sections of code can be totally predicated, minimizing the dependency on branch predictors.
 
 \begin{center}
@@ -89,7 +88,7 @@ In Listing~\ref{lst:itanium_predicated}, it's possible to see the \texttt{IA-64}
 \subsection{Detecting Predicable Regions}
 \label{sec:detecting_pred}
 
-Some operations are difficult to predicate. Interruption, Exceptions and System Calls have side effects that expand beyond the local execution and might trigger events that are impossible to revert. Certain Control Flow Instructions like \texttt{jmp} and \texttt{call} alter the program’s execution path, predicating this requires hardware to simulate both the taken and non-taken paths simultaneously.
+Some operations are difficult to predicate. Interruption, Exceptions and System Calls have side effects that expand beyond the local execution and might trigger events that are impossible to revert. Certain Control Flow Instructions like \texttt{jmp} and \texttt{call} alter the program's execution path, predicating this requires hardware to simulate both the taken and non-taken paths simultaneously.
 Additionally, predicating large blocks results in executing many unnecessary instructions when the predicate is false. The performance penalty of executing unnecessary instructions outweighs the benefit of avoiding a branch. A set of basic block is therefore considered not predicable if it exceeds certain sizes.
 
 % TODO do we have a definitio of Control Flow Graph somewhere? do we have a definition of Basic Block somewhere?
@@ -107,20 +106,49 @@ For each block, the function \texttt{AnalyzeBlock} is called. A simplified versi
 
 A \textit{MachineBasicBlock} is a basic block after being translated to machine instructions.
 This function analyzes the structure of a \texttt{sub-CFG} starting from a given \texttt{MachineBasicBlock}. It evaluates branches and records successors to determine if the block is suitable for \texttt{if-conversion}.
-The function \texttt{AnalyzeBranches}, determines if its branches can be analyzed or reversed, and checks if it has fall-through behavior. The data collected when this function runs are then stored in the \texttt{MachineBasicBlock} struct and used later. The function \texttt{ScanInstruction} scans all the instructions in the block to determine if the block is predicable. In most cases, a block is predicable if all the instructions in the block are predicable. 
-When this analysis grants that the current basic block is predicable, the function verifies if common predication patterns exists with other basic blocks. The common predication patterns are described in Subsection \ref{sec:common_predication_patterns}
+The function \texttt{AnalyzeBranches}, determines if its branches can be analyzed or reversed, and checks if it has fall-through behavior. The data collected when this function runs are then stored in the \texttt{MachineBasicBlock} struct and used later. The function \texttt{ScanInstruction} scans all the instructions in the block to determine if the block is predicable. In most cases, a block is predicable if all the instructions in the block are predicable.
+If the sub-CFG is not predicable, no further analysis are performed. If it is, certain pattern are searched in the sub-CFG graph. \\
 
-The analysis, described so far, finds a set of basic blocks that are predicable and calculate the penalty for predication. if there is one.
+\begin{figure}[H]
+    \centering
+    \input{src/figure/triangle_branch}
+    \caption{The C++ code on the left, has a EBB, a TBB and a fall through FBB. When compiled it gives origin to the triangular branch on the right.}
+    \label{fig:triangle_branch}
+\end{figure}
+
+The simplest pattern identified in the CFG is a \textit{Triangular Branch}, an example is shown in Figure \ref{fig:triangle_branch}. This control flow pattern begins with an \textit{Entry Basic Block} (EBB) which branches into a \textit{True Basic Block} (TBB). Both the EBB and TBB subsequently converge into the \textit{False Basic Block} (FBB).
+
+When a \textit{Triangular Branch} is identified when using \textit{ARMv7} as the target architecture, given the analysis already performed and the hardware support, we know that it can be predicated. The last step is therefore to verify if the number of instructions to be predicated is within the limit. This is performed in the function \texttt{MeetIfcvtSizeLimit}. The logic used in this function to calculate the number of instruction is reported in Listing \ref{fig:predication_size}.
+
+\begin{figure}[H]
+    \centering
+    \input{src/listing/ls_predication_size.tex}
+    \caption{Logic used in \textit{LLVM} to decide if a block is too big to be predicated.}
+    \label{fig:predication_size}
+\end{figure}
+
+The number of instructions to be predicated is determined by counting the number of instruction in the TIB and in the FIB. Each instruction in these ranges is counted, incrementing the \texttt{NumPredicatedInstructions} variable. If the total number of predicated instructions exceeds a predefined threshold of 15, the function decides not to proceed with predication, ensuring that excessively large predicated blocks are avoided to maintain efficiency.
+
+In the case of the \textit{Triangular Branch}, the FIB is common to both branches, therefore the size only depends on the number of instructions in the TIB. In Figure \ref{fig:triangle_asm}, the before and after in machine code is shown for the code provided in Listing \ref{fig:triangle_branch}
+
+\begin{figure}[H]
+    \centering
+    \input{src/figure/triangle_converted.tex}
+    \caption{Comparison of assembly code and control flow graphs (CFGs) for \texttt{triangleBranch}: original code with branching versus optimized code with predication, demonstrating CFG simplification.}
+    \label{fig:triangle_asm}
+\end{figure}
+
+
+Three other patterns exists: \textit{Diamond}, \textit{Forked Diamond} and \textit{Simple}. Each of these patterns requires a different size and feasibility analysis to determine if they can be \textit{if-converted}.
 
 \subsection{Compiler's Heuristics}
 \label{sec:compiler_heuristics}
 
-As already showed in Section \ref{sec:predication}, predication is versatile and can bring different advantages depending on the situation, at the same time, if applied without caution, it can result in performance degradation.
-In order to decide whether to use this technique or not, modern compilers apply heuristics. These heuristics are highly architecture dependent (as Table \ref{tab:misprediction_penalty} points out). In the rest of this section, the heuristics used by the production state of the art compiler \textit{LLVM} are analyzed.
+As demonstrated in Section \ref{sec:predication} and highlighted by August et al. \cite{August98}, indiscriminate use of predication leads to performance degradation.
+In order to decide whether to use this technique or not, modern compilers use heuristics. These heuristics are highly  dependent on the architecture (as we is possible to see in Table \ref{tab:misprediction_penalty}). In the rest of this section, the heuristics used by the production state of the art compiler \textit{LLVM} is analyzed.
 
-Knowing that a set of blocks, once predicated, will take a higher amount of cycles to execute is not enough to rule out predication. Two more factors have to be taken into account. The cost of misprediction and the code size.
-
-Another crucial information that is calculated in \texttt{ScanInstruction} is whether there is an additional cost to pay when predicating the Basic Block being analyzed. The logic used to do so is reported in Listing \ref{lst:predication_cost}
+Section \ref{sec:detecting_pred} already introduced that, when analyzing a block for \textit{if-conversion} the possible cost is computed. Given that the impact of predication can be both positive and negative, when the cost is negative, we always choose to apply the \textit{if-conversion} transformation. On the other hand, when the cost is positive, we do not always rule out predication. Instead, we apply a further heuristics that take into account the cost of misprediction.
+The logic to perform the cost analysis of predication is in the function \texttt{ScanInstruction} which is partially reported in Listing \ref{lst:predication_cost}
 
 \begin{figure}[H]
     \centering
@@ -135,12 +163,25 @@ The cost of predicating a Basic Block consists of two components: architecture-d
     \centering
     \input{src/listing/ls_predication_heuristic}
     \caption{\textit{LLVM}'s \texttt{isProfitableToIfCvt} implementation for \texttt{ARM} architectures.}
-    \label{fig:predications_heuristic}
+    \label{lst:predications_heuristic}
 \end{figure}
 
-\subsection{Common Predication Patterns}
-\label{sec:common_predication_patterns}
+The cost used in \texttt{isProfitableToIfCvt} are:
 
+\begin{itemize}
+    \item \textbf{TCycles}: The execution time (in cycles) of the "True" block.
+    \item \textbf{TExtra}: Additional cost (in cycles) for predicating the "True" block.
+    \item \textbf{FCycles}: The execution cost (in cycles) of the "False" block.
+    \item \textbf{FExtra}: Additional cost (in cycles) for predicating the "False" block.
+\end{itemize}
+
+The actual cost of predication is calculated on line 15 of Image \ref{lst:predications_heuristic}:
+\[
+\text{PredCost} = (\text{TCycles} + \text{FCycles} + \text{TExtra} + \text{FExtra})
+\]
+The cost of omitting the predication is more complex as it needs to take into account the \textit{Costo of Misprediction} and the probability of each side of the branch has to be weighted based on how often the side is actually executed.
+This weighting is necessary because not all branches are equally likely to execute. The execution cost of the "then" or "else" path should reflect their respective probabilities, as this determines the expected cost of the branch in practice. Without weighting, the cost estimation would not accurately represent the real-world behavior of the code under typical execution conditions. For instance, if one of the two side of the branch is very expensive to execute but it does not get executed often, the overall cost of the branch might still be low.
+The {Costo of Misprediction}, on the other hand, is a static cost that is dependant on the target architecture. Some {Costo of Misprediction} are reported in Table \ref{tab:misprediction_penalty}.
 
 \subsection{Predication Benchmarks}
 \label{sec:predication_benchmark}

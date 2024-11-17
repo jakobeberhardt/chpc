@@ -1,6 +1,6 @@
 \begin{lstlisting}[style=CStyle]
 /// Analyze the structure of the sub-CFG starting from the specified block.
-/// Record its successors and whether it looks like an if-conversion candidate.
+/// Record its successors and whether it looks like an if-conversion candidate
 void IfConverter::AnalyzeBlock(
     MachineBasicBlock &MBB, std::vector<std::unique_ptr<IfcvtToken>> &Tokens) {
   // Initialize stack with the starting block.
@@ -9,10 +9,6 @@ void IfConverter::AnalyzeBlock(
   while (!BBStack.empty()) {
     MachineBasicBlock *BB = BBStack.pop_back_val();
     BBInfo &BBI = BBAnalysis[BB->getNumber()];
-
-    // Skip blocks already analyzed.
-    if (BBI.IsAnalyzed) 
-      continue;
 
     // Analyze branches and instructions in the block.
     AnalyzeBranches(BBI);
