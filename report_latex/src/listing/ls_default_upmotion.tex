@@ -1,0 +1,10 @@
+\begin{lstlisting}[style=AsmStyle]    
+    LDR r1, [address]
+    CMP r1, #0
+    BEQ taken
+    SDIV r1, #5, r1
+    B end
+taken:
+    ADD r1, r1, #2
+end:
+\end{lstlisting}

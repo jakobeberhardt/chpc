@@ -1,0 +1,45 @@
+\documentclass{article}
+
+\input{common}
+\usepackage[paper=a4paper, margin=3.5cm]{geometry}
+\usepackage{adjustbox}
+\usepackage{caption}
+\usepackage{parcolumns}
+
+\title{Predication and Speculation \\[0.7em] \small{Compilers for High Performance Computers}}
+\author{Stefano Petrilli\\ \texttt{stefano.petrilli@upc.edu}\\[1ex] % [1ex] adds vertical space
+  Jakob Eberhardt\\ \texttt{jakob.eberhardt@estudiantat.upc.edu}}
+\date{\today}
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
+\tableofcontents
+\lstlistoflistings
+\listoffigures
+\listoftables
+\newpage
+
+\input{introduction}
+
+%\renewcommand{sec:predication}) 
+
+\input{speculation}
+\input{predication}
+
+\section{Predication and Speculation}
+\label{sec:predication_and_speculation}
+\newpage
+
+\printbibliography
+
+\end{document}
+
+INSTRUCTION SOURCE DEST
+I0 r1 r2
+BR L3
+I2 r2 r3
+...
+L3

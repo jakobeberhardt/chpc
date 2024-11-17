@@ -1,0 +1,11 @@
+\begin{table}
+\label{tab:save_unsafe}
+    \begin{tabularx}{\linewidth}{|>{\centering\arraybackslash}c|X|X|}
+    \hline
+    \rowcolor{gray!50}
+    \textbf{Type} & \textbf{Behavior} & \textbf{Example} \\ \hline
+    \textit{safe} & Never causes an exception to a dominating block & Register-to-register operations \\ \hline
+    \textit{unsafe} & Can always cause an exception to a dominating block & Loads, certain floating-point instructions \\
+    \hline
+    \end{tabularx}
+\end{table}

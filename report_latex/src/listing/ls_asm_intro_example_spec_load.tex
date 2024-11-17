@@ -1,0 +1,8 @@
+\begin{lstlisting}[style=AsmStyle]
+LDR     r3, [r0]            
+LDR     r1, [r2, r3, LSL #2]
+CMP     r3, #0              
+BLE     skip_store 
+STR     r1, [r4]            
+skip_store:
+\end{lstlisting}

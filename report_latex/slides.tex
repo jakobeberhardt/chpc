@@ -1,0 +1,191 @@
+\documentclass[presentation]{beamer}
+\input{common}
+\usefonttheme{structurebold}
+\usetheme{Madrid} 
+\usecolortheme{seahorse}
+
+\title{Predication and Speculation}%Titel
+\subtitle{Compilers for High Performance Computers}%Untertitel
+\author{Stefano Petrilli\\ \texttt{stefano.petrilli@upc.edu}\\[1ex] % [1ex] adds vertical space
+  Jakob Eberhardt\\ \texttt{jakob.eberhardt@estudiantat.upc.edu}}
+%\institute{Universitat Politècnica de Catalunya}
+\date{\today{}}
+\setbeamertemplate{footline}{
+   \leavevmode%
+   \hbox{%
+   \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+     Stefano Petrilli, Jakob Eberhardt%Kann auch leer sein
+   \end{beamercolorbox}%
+   \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+     \today{}
+   \end{beamercolorbox}%
+   \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+     \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+   \end{beamercolorbox}}%
+   \vskip0pt%
+}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}[fragile]{Problem Introduction}
+    \input{src/listing/ls_problem_intro}
+    \captionof{lstlisting}{For \texttt{size=100000000}, we take 1.348 seconds}
+    \label{lst:baseline_c} 
+\begin{block}{Conditional Codes}
+    \begin{itemize}
+        \item Concern control flow of the program
+        \item Jump to a different instruction based on a condition
+        \item May effect performance
+    \end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}[fragile]{Instructions have to wait for dependencies}
+    \begin{center}
+        \resizebox{0.75\textwidth}{!}{
+            \input{src/listing/ls_asm_standard}
+        }
+    \end{center}
+    
+    \vspace{0cm}
+    \begin{figure}
+        \centering
+        \resizebox{0.73\textwidth}{!}{
+            \input{src/figure/fig_pipeline_1} % Include the figure from an external file.
+        }
+        \caption{We need to wait for \texttt{data[i]} to be written back to \texttt{w0} for the comparison. We also need to wait for \texttt{b.ge} to finish to know which instruction to fetch next}
+        \label{fig:pipeline-stages}
+    \end{figure}
+\end{frame}
+
+
+\begin{frame}[fragile]{Instructions have to wait for dependencies}
+    \begin{block}{Problem}
+        \begin{itemize}
+            \item We have to wait for \texttt{data[i]} to be loaded
+            \item We cannot exploit available resources 
+            \item We do not know which instruction to fetch next
+            \item Pipeline stalls, IPC$\downarrow$
+            \item \textbf{We need to reduce the cost of conditional branching}
+        \end{itemize}
+        \end{block}
+    \vspace{0cm}
+    \begin{figure}
+        \centering
+        \resizebox{\linewidth}{!}{
+            \input{src/figure/fig_pipeline_intro_cachemiss}
+        }
+        \caption{A Cache miss may effect the pipeline even more.}
+        \label{fig:pipeline-diagram}
+    \end{figure}
+
+\end{frame}
+
+\begin{frame}{Methods}
+\begin{center}
+\input{src/figure/fig_hardware_software}
+\end{center}
+\begin{itemize}
+    \item \textbf{Speculation}
+        \begin{itemize}
+            \item Speculate about control flow at run time while compiling
+            \item Generate additional code, e.g., compensation code 
+        \end{itemize}
+    \item \textbf{Predication}
+        \begin{itemize}
+            \item Execute multiple branches
+            \item Select correct result when condition arrives
+            \item Requires special instructions, e.g., \texttt{cmov}
+        \end{itemize}
+    \item \textcolor{gray}{\textbf{Prediction}} 
+        \begin{itemize}
+            \item \textcolor{gray}{Try to predict control flow during run time}
+            \item \textcolor{gray}{Using a hardware structure such as a branch predictor}
+        \end{itemize}
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Speculation}
+    \begin{block}{Definition}
+    "An instruction is \textit{speculatively} executed if it is moved above a conditional branch that it is control dependent upon"~\cite{chang95}
+    \end{block}
+    \begin{itemize}
+        \item \textbf{Compiler-controlled}
+            \begin{itemize}
+              \item Speculate about real control flow
+              \item Try to enable other optimization opportunities
+        \end{itemize}
+        \item \textbf{Control Speculation}
+        \begin{itemize}
+               \item Execute instructions before control flow was determined 
+        \end{itemize}
+        \item \textbf{Data Speculation}
+        \begin{itemize}
+            \item Execute instructions with potentially wrong data 
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Exceptions}
+        \input{src/table/tab_safe_unsafe}
+\end{frame}
+    
+\begin{frame}[fragile]
+\frametitle{Predicated Execution without Branching}
+
+\begin{lstlisting}[style=AsmStyle]
+loop_predicated:
+    cmp w21, w20                    // compare i with size
+    b.ge end_predicated             // if i >= size, exit loop
+
+    ldr w0, [x19, w21, UXTW #2]     // w0 = data[i]
+    cmp w0, #50
+    csel w0, wzr, w0, lt            // if w0 < 50, w0 = 0; else w0 = w0
+    str w0, [x19, w21, UXTW #2]     // data[i] = w0
+
+    add w21, w21, #1                // i++
+    b loop_predicated
+\end{lstlisting}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Speculative Execution with Branching}
+
+\begin{lstlisting}[style=AsmStyle]
+loop_speculative:
+    cmp w21, w20                // compare i with size
+    b.ge end_speculative        // if i >= size, exit loop
+
+    ldr w0, [x19, w21, UXTW #2] // w0 = data[i]
+    cmp w0, #50
+    b.ge skip_update            // if data[i] >= 50, skip update
+    mov w0, #0                  // w0 = 0
+    str w0, [x19, w21, UXTW #2] // data[i] = w0
+skip_update:
+    add w21, w21, #1            // i++
+    b loop_speculative
+\end{lstlisting}
+\end{frame}
+
+
+
+% \input{misc/intro}
+% \input{misc/bullet_with_figure}
+% \input{misc/bullet_with_two_figures}
+% \input{misc/block_and_list}
+% \input{misc/two-side-by-side}
+% \input{misc/three-side-by-side}
+% \input{misc/basic_plot}
+% \input{misc/stencil}
+% \input{misc/two-side-by-side}
+% \input{misc/listing}
+
+
+
+\begin{frame}[allowframebreaks]{References \& Questions}
+    \printbibliography
+\end{frame}
+\end{document}

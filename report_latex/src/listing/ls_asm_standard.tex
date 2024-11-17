@@ -1,0 +1,13 @@
+\begin{lstlisting}[style=AsmStyle]
+loop:
+    cmp w21, w20                // compare i with size
+    b.ge end_loop               // if i >= size, exit loop
+@    ldr w0, [x19, w21, UXTW #2] // w0 = data[i] @
+@    cmp w0, #50 @
+@    b.ge skip_update            // if data[i] >= 50, skip @
+@    mov w0, #0                  // w0 = 0  @
+    str w0, [x19, w21, UXTW #2] // data[i] = w0
+skip_update:
+    add w21, w21, #1            // i++
+    b loop
+\end{lstlisting}

@@ -1,0 +1,8 @@
+\begin{lstlisting}[style=CStyle]
+BBI.NonPredSize++;
+unsigned ExtraPredCost = TII->getPredicationCost(MI);
+unsigned NumCycles = SchedModel.computeInstrLatency(&MI, false);
+if (NumCycles > 1)
+    BBI.ExtraCost += NumCycles-1;
+BBI.ExtraCost2 += ExtraPredCost;
+\end{lstlisting}

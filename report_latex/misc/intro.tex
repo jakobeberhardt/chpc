@@ -1,0 +1,25 @@
+\begin{frame}{Introduction}
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north east, inner sep=0pt, yshift=-1cm, xshift=-0.5cm] at (current page.north east) {
+    \includegraphics[width=2cm]{assets/placeholder.png}
+  };
+  \node[anchor=south east, inner sep=0pt, yshift=2cm, xshift=-0.5cm] at (current page.south east) {
+    \includegraphics[width=2cm]{assets/placeholder.png}
+  };
+\end{tikzpicture}
+
+\begin{itemize}
+    \item Solves the linear heat conduction equation in 2D
+    \item Application consists of low-complexity kernels
+    \begin{itemize}
+        \item Conjugate Gradient, Chebyshev, Jacobi
+    \end{itemize}
+    \item Many implementations are available
+    \begin{itemize}
+        \item \textbf{Fortran with MPI}
+        \item OpenCL, CUDA, Petsc, Trilinos, Hypre
+    \end{itemize}
+    \item Source code: \href{https://github.com/UK-MAC/TeaLeaf}{github.com/UK-MAC/TeaLeaf} \cite{tearepo}
+
+\end{itemize}
+\end{frame}

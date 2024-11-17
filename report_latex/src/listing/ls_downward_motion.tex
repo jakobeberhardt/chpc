@@ -1,0 +1,10 @@
+\begin{lstlisting}[style=AsmStyle]    
+    CMP     r3, #0
+    BEQ     Target
+    LDR     r1, [R2]
+    ADD     r4, r1, r5
+    ; ...
+Target:
+    @LDR     r1, [r2]@
+    SUB     r6, r1, r7
+\end{lstlisting}

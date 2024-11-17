@@ -1,0 +1,74 @@
+\usepackage{colortbl} 
+\usepackage{amsmath}  
+\usepackage{float}
+\usepackage{pgfplots}
+\usepackage{hyperref}
+\usepackage{pgfplotstable}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{siunitx}
+\pgfplotsset{compat=1.18}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=false,
+    pdfborder={0 0 0}
+}
+\usepackage{biblatex}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning, calc}
+\usepackage{tcolorbox}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{tabularx}
+\usetikzlibrary{arrows.meta, backgrounds, positioning}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codeblue}{rgb}{0,0,0.6}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+
+\lstdefinestyle{CStyle}{
+    language=C,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{codeblue},
+    commentstyle=\color{codegreen},
+    stringstyle=\color{codegray},
+    numbers=left,
+    numberstyle=\tiny\color{codegray},
+    stepnumber=1,
+    numbersep=5pt,
+    showstringspaces=false,
+    tabsize=4,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single
+}
+
+\lstdefinestyle{AsmStyle}{
+  language=[x86masm]Assembler,
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{codeblue},
+  commentstyle=\color{codegreen},
+  stringstyle=\color{codegray},
+  numbers=left,
+  numberstyle=\tiny\color{codegray},
+  stepnumber=1,
+  numbersep=5pt,
+  showstringspaces=false,
+  tabsize=4,
+  captionpos=b,
+  breaklines=true,
+  breakatwhitespace=false,
+  frame=single,
+  moredelim=**[is][\lsthighlight]{@}{@},
+  morekeywords={ldr, str, cmp, csel, b.ge, add, ret, mov, stp, ldp, uxtw}
+}
+
+\newcommand{\lsthighlight}{%
+  \makebox[0pt][l]{\color{red!10}\rule[-1ex]{\linewidth}{\baselineskip}}}
+\newcommand{\armvs}{\texttt{ARMv7} }
+
+\addbibresource{references.bib}

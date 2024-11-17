@@ -1,0 +1,32 @@
+\begin{lstlisting}[style=CStyle]
+bool ARMBaseInstrInfo::
+isProfitableToIfCvt(MachineBasicBlock &TBB,
+                    unsigned TCycles, unsigned TExtra,
+                    MachineBasicBlock &FBB,
+                    unsigned FCycles, unsigned FExtra,
+                    BranchProbability Probability) const {
+  if (!TCycles)
+    return false;
+
+  // Attempt to estimate the relative costs of predication versus branching.
+  // Here we scale up each component of UnpredCost to avoid precision issue when
+  // scaling TCycles/FCycles by Probability.
+  const unsigned ScalingUpFactor = 1024;
+
+  unsigned PredCost = (TCycles + FCycles + TExtra + FExtra) * ScalingUpFactor;
+  unsigned UnpredCost;
+  if (!Subtarget.hasBranchPredictor()) {
+    // This code block contains the case where a pranch predictor
+    // is not available. For the sake of brevity is not reported
+  } else {
+    unsigned TUnpredCost = Probability.scale(TCycles * ScalingUpFactor);
+    unsigned FUnpredCost =
+      Probability.getCompl().scale(FCycles * ScalingUpFactor);
+    UnpredCost = TUnpredCost + FUnpredCost;
+    UnpredCost += 1 * ScalingUpFactor; // The branch itself
+    UnpredCost += Subtarget.getMispredictionPenalty() * ScalingUpFactor / 10;
+  }
+
+  return PredCost <= UnpredCost;
+}
+\end{lstlisting}
