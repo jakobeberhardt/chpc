@@ -145,10 +145,9 @@ Three other patterns exists: \textit{Diamond}, \textit{Forked Diamond} and \text
 \label{sec:compiler_heuristics}
 
 As demonstrated in Section \ref{sec:predication} and highlighted by August et al. \cite{August98}, indiscriminate use of predication leads to performance degradation.
-In order to decide whether to use this technique or not, modern compilers use heuristics. These heuristics are highly  dependent on the architecture (as we is possible to see in Table \ref{tab:misprediction_penalty}). In the rest of this section, the heuristics used by the production state of the art compiler \textit{LLVM} is analyzed.
+To determine whether to apply this technique, modern compilers rely on heuristics. The heuristics are highly architecture-dependent, as illustrated in Table \ref{tab:misprediction_penalty}. In the rest of this section, the heuristics used by the production state of the art compiler \textit{LLVM} is described.
 
-Section \ref{sec:detecting_pred} already introduced that, when analyzing a block for \textit{if-conversion} the possible cost is computed. Given that the impact of predication can be both positive and negative, when the cost is negative, we always choose to apply the \textit{if-conversion} transformation. On the other hand, when the cost is positive, we do not always rule out predication. Instead, we apply a further heuristics that take into account the cost of misprediction.
-The logic to perform the cost analysis of predication is in the function \texttt{ScanInstruction} which is partially reported in Listing \ref{lst:predication_cost}
+Section \ref{sec:detecting_pred} already introduced that, when analyzing a block for \textit{if-conversion} the possible cost is computed. The cost of predicating a Basic Block consists of two components: architecture-dependent predication cost and instruction latency. These costs vary based on the specific instruction and the architecture. Some architectures impose a fixed cost for predicating any instruction, while others either avoid this cost entirely or apply it selectively to certain instructions. Importantly, the cost of predication associated with each instruction is not arbitrarily defined by the compiler but instead reflects the actual cost of executing the instruction on the target architecture. Taking as reference the \texttt{ARMv7} architecture, calls have an additional latency of 1 cycle to be predicated, while predicating any other instruction does not introduce any other cost. It's important to note that compared to other architectures, predication in \texttt{ARMv7} is a central part of the architecture and therefore is cheap.
 
 \begin{figure}[H]
     \centering
@@ -157,7 +156,8 @@ The logic to perform the cost analysis of predication is in the function \texttt
     \label{lst:predication_cost}
 \end{figure}
 
-The cost of predicating a Basic Block consists of two components: architecture-dependent predication cost and instruction latency. These costs vary based on the specific instruction and the architecture. Some architectures impose a fixed cost for predicating any instruction, while others either avoid this cost entirely or apply it selectively to certain instructions. Taking as reference the \texttt{ARMv7} architecture, calls have an additional latency of 1 cycle to be predicated, while predicating any other instruction does not introduce any other cost.
+The impact of predication can be both positive and negative on the number of cycles needed to execute a function. When the cost is negative, we always choose to apply the \textit{if-conversion} transformation. On the other hand, having a positive cost does not automatically rule out predication. Instead, we apply a further heuristic that takes into account the cost of misprediction.
+The logic to perform the cost analysis of predication is in the function \texttt{ScanInstruction} which is partially reported in Listing \ref{lst:predication_cost}
 
 \begin{figure}[H]
     \centering
@@ -180,10 +180,23 @@ The actual cost of predication is calculated on line 15 of Image \ref{lst:predic
 \text{PredCost} = (\text{TCycles} + \text{FCycles} + \text{TExtra} + \text{FExtra})
 \]
 The cost of omitting the predication is more complex as it needs to take into account the \textit{Costo of Misprediction} and the probability of each side of the branch has to be weighted based on how often the side is actually executed.
-This weighting is necessary because not all branches are equally likely to execute. The execution cost of the "then" or "else" path should reflect their respective probabilities, as this determines the expected cost of the branch in practice. Without weighting, the cost estimation would not accurately represent the real-world behavior of the code under typical execution conditions. For instance, if one of the two side of the branch is very expensive to execute but it does not get executed often, the overall cost of the branch might still be low.
-The {Costo of Misprediction}, on the other hand, is a static cost that is dependant on the target architecture. Some {Costo of Misprediction} are reported in Table \ref{tab:misprediction_penalty}.
+This weighting is necessary because not all branches are equally likely to execute. The execution cost of the "True" or "False" path should reflect their respective probabilities, as this determines the expected cost of the branch in practice. Without weighting, the cost estimation would not accurately represent the real-world behavior of the code under typical execution conditions. For instance, if one of the two side of the branch is very expensive to execute but it does not get executed often, the overall cost of the branch might still be low.
+The {Cost of Misprediction}, on the other hand, is a static cost that is dependant on the target architecture. Some {Cost of Misprediction} are reported in Table \ref{tab:misprediction_penalty}.
+
+Section \ref{sec:predication_benchmark} shows conrete examples of how these heuristic condition the output of the compiler.
 
 \subsection{Predication Benchmarks}
 \label{sec:predication_benchmark}
+
+Computing the cycle cost of basic block is not trivial. It depends on several variables and these variables are not always in plain sight: some of these variables depend on the target architecture while other are calculated using further heuristics that the compiler leverage to compute the probability of a given branch. As these internals are obscure, convoluted and buried in repositories that have millions of lines of code, it's impossible to reliably predict the compiler's output. The only option we are left with is to look at the compiler's output to try to understand the choice that have been taken.
+
+% Add one predication example where dimension is reduced
+
+% Add one predication case using diamond or forked diamond
+
+As we have seen, the choice that the compiler takes, often results in the most efficient version of the code possible. However, this is not always the case.
+The heuristics used by the compiler and described in Section \ref{sec:compiler_heuristics}, are designed to be general and provide good results in most scenarios. Additionally, the compiler's knowledge at compile time is inherently limited. For these reasons, humans are often still able to produce better assembly code than compilers.
+
+% TODO add the predication case made by jakoob
 
 \newpage
