@@ -19,41 +19,54 @@ main: main.o
 main.o: main.c
 	$(CC) $(CFLAGS) -c main.c
 
-clean:
-	rm -f main main.o main_restricted main_boosting main_restricted_pgo main_boosting_pgo main.prof *.profdata *.profraw
-
 main_restricted: main.c
-	$(CC) $(CFLAGS) -o main_restricted main.c -mllvm -enable-misched=false
+	$(CC) $(CFLAGS) -o main_restricted main.c -mllvm -enable-misched=false -mllvm -avoid-speculation=true
 
 main_boosting: main.c
-	$(CC) $(CFLAGS) -o main_boosting main.c -mllvm -enable-misched=true
+	$(CC) $(CFLAGS) -o main_boosting main.c -mllvm -enable-misched=true -mllvm -avoid-speculation=false
 
 benchmark: main_restricted main_boosting
-	@echo "Running Restricted Code Percolation version..."
-	./main_restricted 100000000 0.80
-	@echo "Running Boosting Code Percolation version..."
-	./main_boosting 100000000 0.80
+	./main_restricted 600000000 0.0
+	./main_boosting 600000000 0.0
 
-# rules for profiling and using profile data
 main.prof: main.c
-	$(CC) -O2 -fprofile-instr-generate -o main.prof main.c
+	$(CC) $(CFLAGS) -fprofile-instr-generate -o main.prof main.c
 
 default.profraw: main.prof
-	@echo "Running instrumented program to collect profile data..."
-	./main.prof 100000000 0.99
+	./main.prof 1000000 0.99
 
 profile.profdata: default.profraw
-	@echo "Merging profile data..."
 	llvm-profdata merge -output=profile.profdata default.profraw
 
 main_restricted_pgo: main.c profile.profdata
-	$(CC) $(CFLAGS) -fprofile-instr-use=profile.profdata -o main_restricted_pgo main.c -mllvm -enable-misched=false
+	$(CC) $(CFLAGS) -fprofile-instr-use=profile.profdata -o main_restricted_pgo main.c -mllvm -enable-misched=false -mllvm -avoid-speculation=true
 
 main_boosting_pgo: main.c profile.profdata
-	$(CC) $(CFLAGS) -fprofile-instr-use=profile.profdata -o main_boosting_pgo main.c -mllvm -enable-misched=true
+	$(CC) $(CFLAGS) -fprofile-instr-use=profile.profdata -o main_boosting_pgo main.c -mllvm -enable-misched=true -mllvm -avoid-speculation=false
 
-benchmark_pgo: main_restricted_pgo main_boosting_pgo
-	@echo "Running Restricted Code Percolation version with PGO..."
-	./main_restricted_pgo 200000000 0.01
-	@echo "Running Boosting Code Percolation version with PGO..."
-	./main_boosting_pgo 200000000 0.01
+benchmark_restricted: main_restricted_pgo
+	@echo "Benchmarking main_restricted with profiling..."
+	@count=5; \
+	for i in `seq 1 $$count`; do \
+		time=`./main_restricted_pgo 600000000 1.0`; \
+		echo "Run $$i: $$time seconds"; \
+	done; 
+
+benchmark_boosting: main_boosting_pgo
+	@echo "Benchmarking main_boosting with profiling..."
+	@count=5; \
+	for i in `seq 1 $$count`; do \
+		time=`./main_boosting_pgo 600000000 1.0`; \
+		echo "Run $$i: $$time seconds"; \
+	done; 
+
+benchmark_unprofiled: main_restricted
+	@echo "Benchmarking main_restricted without profile..."
+	@count=5; \
+	for i in `seq 1 $$count`; do \
+		time=`./main_restricted 600000000 1.0`; \
+		echo "Run $$i: $$time seconds"; \
+	done; 
+
+clean:
+	rm -f main main.o main_restricted main_boosting main_restricted_pgo main_boosting_pgo main.prof *.profdata *.profraw

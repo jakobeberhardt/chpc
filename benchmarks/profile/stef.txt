@@ -1,0 +1,12 @@
+Avoid "it's" -> it is
+Avoid numbers 6 -> six
+Avoid "Finally" -> "Lastly"
+Avoid nested sentences 
+Avoid "image" -> "figure"
+use capital letter in section/subsection titels: "Replacing a conditional branch with arithmetic operations" -> "Replacing a Conditional Branch with Arithmetic Operations"
+Avoid use of \textbf{}, it draws too much attetion becasue it is not common
+Avoid manual linebraks \\ \newline
+Use figure/Figure section/Section listing/Listing consistently
+Put captions for the table of contents and for the figure itself. Sometimes we had a whole paragraph in the table of contents. \caption[Short with capital letter]{Long with period.}
+Avoid "Thanks to using..." -> "By using ..."
+There is a way to label code sections in listings. Hence, if the code changes you still \ref{} the correct line and you get a warning if it changed.

@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
     int64_t N = atoll(argv[1]);
     double percent_positive = atof(argv[2]);
 
-    printf("Processing %" PRId64 " nodes (%.2f positive)\n", N, percent_positive);
+    // printf("Processing %" PRId64 " nodes (%.2f positive)\n", N, percent_positive);
     srand(time(NULL));
     struct Node* ptr = build_list(N, percent_positive);
 
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
         ptr = ptr->next;
         free(temp);
     }
-
+    
     clock_gettime(CLOCK_MONOTONIC, &end_time);
 
     elapsed_time = (end_time.tv_sec - start_time.tv_sec) +
@@ -81,7 +81,7 @@ int main(int argc, char* argv[]) {
     if(count != 0) {
         avg = weight / count;
     }
-    printf("Average weight: %" PRId64 "\n", avg);
-    printf("Processing time: %.6f seconds\n", elapsed_time);
+    // printf("%" PRId64 " ", avg);
+    printf("%.6f\n", elapsed_time);
     return 0;
 }
