@@ -1,0 +1,71 @@
+\begin{minipage}{0.45\textwidth}
+    \begin{lstlisting}[style=AsmStyle]
+processOrder
+    sub     sp, sp, #20
+    str     r0, [sp, #12]
+    str     r1, [sp, #8]
+    str     r2, [sp, #4]
+    str     r3, [sp]
+    ldr     r0, [sp, #12]
+    cmp     r0, #0
+    bne     .LBB0_4
+    ldr     r0, [sp, #8]
+    cmp     r0, #100
+    bls     .LBB0_3
+    ldr     r0, [sp, #8]
+    sub     r0, r0, #10
+    str     r0, [sp, #16]
+    b       .LBB0_7
+.LBB0_3:
+    ldr     r0, [sp, #8]
+    str     r0, [sp, #16]
+    b       .LBB0_7
+.LBB0_4:
+    ldr     r0, [sp, #4]
+    cmp     r0, #500
+    bls     .LBB0_6
+    ldr     r0, [sp, #8]
+    sub     r0, r0, #10
+    str     r0, [sp, #16]
+    b       .LBB0_7
+.LBB0_6:
+    ldr     r0, [sp, #4]
+    add     r0, r0, #1
+    str     r0, [sp, #4]
+    ldr     r0, [sp, #8]
+    str     r0, [sp, #16]
+.LBB0_7:
+    ldr     r0, [sp, #16]
+    add     sp, sp, #20
+    bx      lr
+    \end{lstlisting}
+\end{minipage}%
+\hspace{1cm}
+\begin{minipage}{0.45\textwidth}
+    \begin{lstlisting}[style=AsmStyle, numbers=right, belowskip=14.5\baselineskip]
+processOrder
+    sub     sp, sp, #20
+    str     r0, [sp, #12]
+    str     r1, [sp, #8]
+    str     r2, [sp, #4]
+    str     r3, [sp]
+    ldr     r0, [sp, #12]
+    cmp     r0, #0
+    @ldrne   r0, [sp, #4]
+    @@addle   r0, r0, #1
+    @@strle   r0, [sp, #4]
+    ldr     r0, [sp, #8]
+    cmp     r0, #100
+    @@subhi   r0, r0, #10
+    str     r0, [sp, #16]
+    ldr     r0, [sp, #12]
+    cmp     r0, #0
+    @ldrne   r0, [sp, #4]
+    @@cmpne   r0, #500
+    @@subgt   r0, r0, #10
+    @@strgt   r0, [sp, #16]
+    ldr     r0, [sp, #16]
+    add     sp, sp, #20
+    bx      lr  
+    \end{lstlisting}
+\end{minipage}%

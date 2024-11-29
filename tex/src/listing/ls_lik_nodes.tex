@@ -1,0 +1,12 @@
+\begin{lstlisting}[style=CStyle]
+while (ptr != NULL) {
+    count++;
+    @if (ptr->wt < 0) [[unlikely]] {@
+        weight -= ptr->wt;
+    } else {
+        weight += ptr->wt;
+    }
+    ptr = ptr->next;
+}
+
+\end{lstlisting}

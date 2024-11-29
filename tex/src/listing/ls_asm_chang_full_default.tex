@@ -1,0 +1,54 @@
+\begin{lstlisting}[style=AsmStyle]
+    ldr r1, _ptr   ; I1
+    mov r7, 0      ; I2
+    mov r2, 0      ; I3
+    mov r3, 0      ; I4
+    beq L3, r1, 0  ; I5
+L0:
+    add r2, r2, 1  ; I6
+    ldr r4, 0[r1]  ; I7
+    bge L1, r4, 0  ; I8
+    sub r3, r3, r4 ; I9
+    br L2          ; I10
+L1:
+   add r3, r3, r4  ; I11
+L2:
+   ldr r1, 4[r1]   ; I12
+   bne L0, r1, 0   ; I13
+L3:
+    beq L4, r2, 0  ; I14
+    div r7, r3, r2 ; I15
+    str _avg r7    ; I16
+L4: 
+\end{lstlisting}
+
+%     ldr     r1, =_ptr            ; 2. Load address of _ptr
+%     ldr     r1, [r1]             ; 3. Load value of _ptr into r1
+%     str     r1, [sp, #12]        ; 4. Store ptr on stack
+%     mov     r7, #0               ; 5. avg = 0
+%     mov     r2, #0               ; 6. count = 0
+%     mov     r3, #0               ; 7. weight = 0
+%     ldr     r0, [sp, #12]        ; 8. Load ptr from stack
+%     cmp     r0, #0               ; 9. Compare ptr to 0
+%     beq     L3                   ; 10. If ptr == 0, branch to L3
+% L0:
+%     add     r2, r2, #1           ; 11. count = count + 1
+%     ldr     r4, [r0]             ; 12. Load ptr->wt into r4
+%     cmp     r4, #0               ; 13. Compare ptr->wt with 0
+%     blt     L1                   ; 14. If ptr->wt < 0, branch to L1
+%     add     r3, r3, r4           ; 15. weight = weight + ptr->wt
+%     b       L2                   ; 16. Branch to L2
+% L1:
+%     sub     r3, r3, r4           ; 17. weight = weight - ptr->wt
+% L2:
+%     ldr     r0, [r0, #4]         ; 18. ptr = ptr->next
+%     cmp     r0, #0               ; 19. Compare ptr to 0
+%     bne     L0                   ; 20. If ptr != 0, loop back to L0
+% L3:
+%     cmp     r2, #0               ; 21. Compare count to 0
+%     beq     L4                   ; 22. If count == 0, skip division
+%     div     r7, r3, r2           ; 23. avg = weight / count
+%     ldr     r0, =_avg            ; 24. Load address of _avg
+%     str     r7, [r0]             ; 25. Store avg into _avg
+% L4:
+%     add     sp, sp, #20          ; 26. Deallocate stack space

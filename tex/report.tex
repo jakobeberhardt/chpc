@@ -1,0 +1,40 @@
+\documentclass{article}
+
+\input{common}
+\usepackage[paper=a4paper, margin=3.5cm]{geometry}
+\usepackage{adjustbox}
+\usepackage{caption}
+\usepackage{parcolumns}
+\usepackage{wrapfig}
+\title{Predication and Speculation \\[0.7em] \small{Compilers for High Performance Computers}}
+\author{Stefano Petrilli\\ \texttt{stefano.petrilli@upc.edu}\\[1ex] % [1ex] adds vertical space
+  Jakob Eberhardt\\ \texttt{jakob.eberhardt@estudiantat.upc.edu}}
+\date{\today}
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\newpage
+\setcounter{page}{1}
+\tableofcontents
+\lstlistoflistings
+\newpage
+\listoffigures
+\listoftables
+\newpage 
+
+\input{introduction}
+\input{speculation}
+\input{predication}
+\input{conclusion}
+
+\newpage
+\appendix
+
+\input{first_appendix}
+
+\newpage
+
+\printbibliography
+
+\end{document}

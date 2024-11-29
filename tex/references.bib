@@ -1,0 +1,242 @@
+@inproceedings{Dz-ChingJuR.2000Aucf,
+author = {Dz-Ching Ju, R. and Nomura, K. and Mahadevan, U. and Le-Chun Wu},
+abstract = {Control speculation refers to the execution of instructions before it has been determined that they would be executed in the normal flow of execution. Data speculation refers to the execution of instructions with potentially incorrect operand values, and a typical example is to execute a load before its preceding aliasing stores. Both types of speculation are effective techniques to enrich instruction level parallelism, but the research work for these two types of speculation have remained largely independent so far and the required compiler support has not been well studied. This paper proposes a unified compiler framework to exploit both control and data speculation and provides an in-depth discussion of various compilation issues. The adopted recovery mechanism guarantees the original program semantics including exceptions fully recoverable from a mis-speculation. Cascaded speculation and predication are also addressed. We demonstrate the effectiveness of the compiler optimization techniques for control and data speculation in terms of run-time performance improvements and code size increases through experimental results.},
+booktitle = {Proceedings 2000 International Conference on Parallel Architectures and Compilation Techniques (Cat. No.PR00622)},
+issn = {1089-795X},
+isbn = {9780769506227},
+keywords = {Collaborative software ; Computer aided instruction ; Delay ; Hardware ; Microprocessors ; Optimizing compilers ; Parallel processing ; Program processors ; Runtime ; Size control},
+language = {eng},
+pages = {157-168},
+publisher = {IEEE},
+title = {A unified compiler framework for control and data speculation},
+year = {2000},
+}
+
+@ARTICLE{chang95,
+  author={Chang, P.P. and Warter, N.F. and Mahlke, S.A. and Chen, W.Y. and Hwu, W.W.},
+  journal={IEEE Transactions on Computers}, 
+  title={Three architectural models for compiler-controlled speculative execution}, 
+  year={1995},
+  volume={44},
+  number={4},
+  pages={481-494},
+  keywords={Processor scheduling;Hazards;Dynamic scheduling;Hardware;Boosting;Performance analysis;Pipeline processing;Parallel processing;Reliability engineering;Buffer storage},
+  doi={10.1109/12.376164}}
+
+@inproceedings{10.1145/279358.279391,
+author = {August, David I. and Connors, Daniel A. and Mahlke, Scott A. and Sias, John W. and Crozier, Kevin M. and Cheng, Ben-Chung and Eaton, Patrick R. and Olaniran, Qudus B. and Hwu, Wen-mei W.},
+title = {Integrated predicated and speculative execution in the IMPACT EPIC architecture},
+year = {1998},
+isbn = {0818684917},
+publisher = {IEEE Computer Society},
+address = {USA},
+url = {https://doi.org/10.1145/279358.279391},
+doi = {10.1145/279358.279391},
+abstract = {Explicitly Parallel Instruction Computing (EPIC) architectures require the compiler to express program instruction level parallelism directly to the hardware. EPIC techniques which enable the compiler to represent control speculation, data dependence speculation, and predication have individually been shown to be very effective. However, these techniques have not been studied in combination with each other. This paper presents the IMPACT EPIC Architecture to address the issues involved in designing processors based on these EPIC concepts. In particular, we focus on new execution and recovery models in which microarchitectural support for predicated execution is also used to enable efficient recovery from exceptions caused by speculatively executed instructions. This paper demonstrates that a coherent framework to integrate the three techniques can be elegantly designed to achieve much better performance than each individual technique could alone provide.},
+booktitle = {Proceedings of the 25th Annual International Symposium on Computer Architecture},
+pages = {227–237},
+numpages = {11},
+location = {Barcelona, Spain},
+series = {ISCA '98}
+}
+
+@article{August98,
+author = {August, David I. and Connors, Daniel A. and Mahlke, Scott A. and Sias, John W. and Crozier, Kevin M. and Cheng, Ben-Chung and Eaton, Patrick R. and Olaniran, Qudus B. and Hwu, Wen-mei W.},
+title = {Integrated predicated and speculative execution in the IMPACT EPIC architecture},
+year = {1998},
+issue_date = {June 1998},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {26},
+number = {3},
+issn = {0163-5964},
+url = {https://doi.org/10.1145/279361.279391},
+doi = {10.1145/279361.279391},
+abstract = {Explicitly Parallel Instruction Computing (EPIC) architectures require the compiler to express program instruction level parallelism directly to the hardware. EPIC techniques which enable the compiler to represent control speculation, data dependence speculation, and predication have individually been shown to be very effective. However, these techniques have not been studied in combination with each other. This paper presents the IMPACT EPIC Architecture to address the issues involved in designing processors based on these EPIC concepts. In particular, we focus on new execution and recovery models in which microarchitectural support for predicated execution is also used to enable efficient recovery from exceptions caused by speculatively executed instructions. This paper demonstrates that a coherent framework to integrate the three techniques can be elegantly designed to achieve much better performance than each individual technique could alone provide.},
+journal = {SIGARCH Comput. Archit. News},
+month = apr,
+pages = {227–237},
+numpages = {11}
+}
+
+
+@inproceedings{Lattner2004LLVM,
+  author    = {Chris Lattner and Vikram Adve},
+  title     = {{LLVM}: A Compilation Framework for Lifelong Program Analysis \& Transformation},
+  booktitle = {Proceedings of the International Symposium on Code Generation and Optimization (CGO)},
+  year      = {2004},
+  pages     = {75--86},
+  publisher = {IEEE},
+  doi       = {10.1109/CGO.2004.1281665},
+  url       = {https://doi.org/10.1109/CGO.2004.1281665}
+}
+
+@article{lin2019branch,
+  title={Branch Prediction Is Not a Solved Problem: Measurements, Opportunities, and Future Directions},
+  author={Lin, Chit-Kwan and Tarsa, Stephen J.},
+  journal={arXiv preprint arXiv:1906.08170},
+  year={2019}
+}
+
+@article{chaitin1981register,
+  author    = {Gregory J. Chaitin and Marc A. Auslander and Ashok K. Chandra and John Cocke and Martin E. Hopkins and Peter W. Markstein},
+  title     = {Register Allocation via Graph Coloring},
+  journal   = {Comput. Lang.},
+  volume    = {6},
+  number    = {1},
+  pages     = {47--57},
+  year      = {1981},
+  publisher = {Pergamon Press, Inc.},
+}
+@article{10.1145/161541.159765,
+author = {Mahlke, Scott A. and Chen, William Y. and Bringmann, Roger A. and Hank, Richard E. and Hwu, Wen-Mei W. and Rau, B. Ramakrishna and Schlansker, Michael S.},
+title = {Sentinel scheduling: a model for compiler-controlled speculative execution},
+year = {1993},
+issue_date = {Nov. 1993},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {11},
+number = {4},
+issn = {0734-2071},
+url = {https://doi.org/10.1145/161541.159765},
+doi = {10.1145/161541.159765},
+abstract = {Speculative execution is an important source of parallelism for VLIW and superscalar processors. A serious challenge with compiler-controlled speculative execution is to efficiently handle exceptions for speculative instructions. In this article, a set of architectural features and compile-time scheduling support collectively referred to as sentinel scheduling is introduced. Sentinel scheduling provides an effective framework for both compiler-controlled speculative execution and exception handling. All program exceptions are accurately detected and reported in a timely manner with sentinel scheduling. Recovery from exceptions is also ensured with the model. Experimental results show the effectiveness of sentinel scheduling for exploiting instruction-level  parallelism and overhead associated with exception handling.},
+journal = {ACM Trans. Comput. Syst.},
+month = nov,
+pages = {376–408},
+numpages = {33},
+keywords = {superscalar processor, speculative execution, instruction-level parallelism, instruction scheduling, exception recovery, exception detection, VlIW processor}
+}
+
+@INPROCEEDINGS{639244,
+  author={Pohua P. Chang and Wen-mei W. Hwu},
+  booktitle={[1988] Proceedings of the 21st Annual Workshop on Microprogramming and Microarchitecture - MICRO '21}, 
+  title={Trace Selection For Compiling Large C Application Programs To Microcode}, 
+  year={1988},
+  volume={},
+  number={},
+  pages={21-29},
+  keywords={Automatic control;Program processors;Weight control;Uncertainty;Compaction;NASA;Resource management;Size control;Performance analysis;Registers},
+  doi={10.1109/MICRO.1988.639244}}
+
+@inproceedings{bringmannMH95,
+  author={Roger A. Bringmann and Scott A. Mahlke and Wen-mei W. Hwu},
+  title={A study of the effects of compiler-controlled speculation on instruction and data caches},
+  year={1995},
+  cdate={788918400000},
+  pages={211-220},
+  url={https://doi.org/10.1109/HICSS.1995.375392},
+  booktitle={HICSS (1)}
+}
+
+@misc{llvm-mca-rfc,
+  author       = {Giuseppe A. Di Guglielmo},
+  title        = {llvm-mca: A Static Performance Analysis Tool},
+  howpublished = {\url{https://lists.llvm.org/pipermail/llvm-dev/2018-March/121490.html}},
+  year         = {2018},
+  note         = {LLVM Developer Mailing List RFC},
+}
+
+@manual{llvm-mca-docs,
+  title        = {llvm-mca: Machine Code Analyzer},
+  author       = {LLVM Project},
+  year         = {2023},
+  howpublished = {\url{https://llvm.org/docs/CommandGuide/llvm-mca.html}},
+  note         = {Accessed: 2024-11-22},
+}
+
+@article{ritter2022anica,
+  title={AnICA: analyzing inconsistencies in microarchitectural code analyzers},
+  author={Ritter, Fabian and Hack, Sebastian},
+  journal={Proceedings of the ACM on Programming Languages},
+  volume={6},
+  number={OOPSLA2},
+  pages={1--29},
+  year={2022},
+  publisher={ACM New York, NY, USA}
+}
+
+@article{tan2024uncovering,
+  title={Uncovering the performance bottleneck of modern HPC processor with static code analyzer: a case study on Kunpeng 920},
+  author={Tan, Shaojie and Jiang, Qingcai and Cao, Zhenwei and Hao, Xiaoyu and Chen, Junshi and An, Hong},
+  journal={CCF Transactions on High Performance Computing},
+  volume={6},
+  number={3},
+  pages={343--364},
+  year={2024},
+  publisher={Springer}
+}
+
+@misc{armv8_instruction_removal,
+  title        = {Performance Effect Because of Removing Some Instructions from ARMv8},
+  author       = {ARM Community},
+  url          = {https://community.arm.com/support-forums/f/architectures-and-processors-forum/7125/performance-effect-because-of-removing-some-instructions-from-armv8},
+  note         = {Accessed: 2024-11-23}
+}
+
+@inproceedings{10.1145/325164.325160,
+author = {Smith, Michael D. and Lam, Monica S. and Horowitz, Mark A.},
+title = {Boosting beyond static scheduling in a superscalar processor},
+year = {1990},
+isbn = {0897913663},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/325164.325160},
+doi = {10.1145/325164.325160},
+abstract = {This paper describes a superscalar processor that combines the best qualities of static and dynamic instruction scheduling to increase the performance of non-numerical applications. The architecture performs all instruction scheduling statically to take advantage of the compiler's ability to efficiently schedule operations across many basic blocks. Since the conditional branches in non-numerical code are highly data dependent, the architecture introduces the concept of boosted instructions, instructions that are committed conditionally upon the result of later branch instructions. Boosting effectively removes the dependencies caused by branches and makes the scheduling of side-effect instructions as simple as those that are side-effect free. For efficiency, boosting is supported in the hardware by shadow structures that temporarily hold the side effects of boosted instructions until the conditional branches that the boosted instructions depend upon are executed. When the branch condition is determined, the buffered side effects are either committed or squashed. The limited static scheduler in our evaluation system shows that a 1.6-times speedup over scalar code is achievable by boosting instructions above only a single conditional branch. This performance is similar to the performance of a pure dynamic scheduler.},
+booktitle = {Proceedings of the 17th Annual International Symposium on Computer Architecture},
+pages = {344–354},
+numpages = {11},
+location = {Seattle, Washington, USA},
+series = {ISCA '90}
+}
+
+@article{10.1145/325096.325160,
+author = {Smith, Michael D. and Lam, Monica S. and Horowitz, Mark A.},
+title = {Boosting beyond static scheduling in a superscalar processor},
+year = {1990},
+issue_date = {June 1990},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {18},
+number = {2SI},
+issn = {0163-5964},
+url = {https://doi.org/10.1145/325096.325160},
+doi = {10.1145/325096.325160},
+abstract = {This paper describes a superscalar processor that combines the best qualities of static and dynamic instruction scheduling to increase the performance of non-numerical applications. The architecture performs all instruction scheduling statically to take advantage of the compiler's ability to efficiently schedule operations across many basic blocks. Since the conditional branches in non-numerical code are highly data dependent, the architecture introduces the concept of boosted instructions, instructions that are committed conditionally upon the result of later branch instructions. Boosting effectively removes the dependencies caused by branches and makes the scheduling of side-effect instructions as simple as those that are side-effect free. For efficiency, boosting is supported in the hardware by shadow structures that temporarily hold the side effects of boosted instructions until the conditional branches that the boosted instructions depend upon are executed. When the branch condition is determined, the buffered side effects are either committed or squashed. The limited static scheduler in our evaluation system shows that a 1.6-times speedup over scalar code is achievable by boosting instructions above only a single conditional branch. This performance is similar to the performance of a pure dynamic scheduler.},
+journal = {SIGARCH Comput. Archit. News},
+month = may,
+pages = {344–354},
+numpages = {11}
+}
+
+@misc{llvm_profdata,
+  title = {{LLVM} Project - Profile Data Tool},
+  author = {LLVM Project},
+  howpublished = {\url{https://llvm.org/docs/CommandGuide/llvm-profdata.html}},
+  note = {Accessed: 27-Nov-2024}
+}
+
+@misc{estes2014schedmachinemodel,
+  author = {Dave Estes},
+  title = {SchedMachineModel: Adding and Optimizing a Subtarget},
+  year = {2014},
+  howpublished = {\url{https://llvm.org/devmtg/2014-10/Slides/Estes-MISchedulerTutorial.pdf}},
+  note = {Accessed: 27-Nov-2024}
+}
+
+@misc{llvm_machinescheduler,
+  title = {{LLVM Documentation: MachineScheduler.cpp}},
+  author = {{LLVM Project}},
+  year = {2024},
+  howpublished = {\url{https://llvm.org/doxygen/MachineScheduler_8cpp.html}},
+  note = {Accessed: 27-Nov-2024}
+}
+
+@misc{clangsupportedsyntaxes,
+  title        = {Clang Supported Syntaxes Documentation},
+  author       = {{LLVM Project}},
+  howpublished = {\url{https://clang.llvm.org/docs/AttributeReference.html}},
+  year         = {2024},
+  note         = {Accessed: November 27, 2024},
+}

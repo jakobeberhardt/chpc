@@ -1,0 +1,54 @@
+\centering
+\begin{tikzpicture}
+    \begin{axis}[
+        width=10cm,
+        height=7.5cm,
+        ybar,
+        symbolic x coords={ComputeLoan, ProcessOrder},
+        xtick=data,
+        ylabel={IPC (Percentage)},
+        ymin=0, ymax=150,
+        nodes near coords,
+        bar width=25pt,
+        axis lines=left,
+        enlarge x limits=0.5,
+        ytick={0,25,50,75,100,125,150},
+        every axis label/.append style={font=\normalsize},
+        every axis tick label/.append style={font=\small},
+        legend style={at={(0.5,-0.15)}, anchor=north, legend columns=-1}, % Adjust legend position
+        legend cell align={left}
+    ]
+        \addplot[pattern=dots, pattern color=red] coordinates {(ComputeLoan, 100) (ProcessOrder, 100)};
+        \addlegendentry{Baseline}
+        
+        \addplot[pattern=north east lines, pattern color=red] coordinates {(ComputeLoan, 105.93) (ProcessOrder, 112.5)};
+        \addlegendentry{Ifconverted}
+    \end{axis}
+\end{tikzpicture}
+\hfill
+\begin{tikzpicture}
+    \begin{axis}[
+        width=10cm,
+        height=7.5cm,
+        ybar,
+        symbolic x coords={ComputeLoan, ProcessOrder},
+        xtick=data,
+        ylabel={Total Cycles (Percentage)},
+        ymin=0, ymax=150,
+        nodes near coords,
+        bar width=25pt,
+        axis lines=left,
+        enlarge x limits=0.5,
+        ytick={0,25,50,75,100,125,150},
+        every axis label/.append style={font=\normalsize},
+        every axis tick label/.append style={font=\small},
+        legend style={at={(0.5,-0.15)}, anchor=north, legend columns=-1}, % Adjust legend position
+        legend cell align={left}
+    ]
+        \addplot[pattern=dots, pattern color=blue] coordinates {(ComputeLoan, 100) (ProcessOrder, 100)};
+        \addlegendentry{Baseline}
+        
+        \addplot[pattern=north east lines, pattern color=blue] coordinates {(ComputeLoan, 75.36) (ProcessOrder, 42.91)};
+        \addlegendentry{Ifconverted}
+    \end{axis}
+\end{tikzpicture}

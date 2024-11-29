@@ -1,0 +1,109 @@
+\begin{minipage}{0.45\textwidth}
+    \begin{lstlisting}[style=AsmStyle]
+expandedComputeLoanPayment:
+  push    {r11, lr}
+  mov     r11, sp
+  sub     sp, sp, #24
+  and     r0, r0, #1
+  strb    r0, [r11, #-1]
+  str     r1, [r11, #-8]
+  mov     r0, #0
+  str     r0, [sp, #12]
+  ldr     r0, [r11, #-8]
+  lsl     r0, r0, #1
+  ldr     r1, .LCPI0_0
+  bl      __aeabi_idiv
+  str     r0, [sp, #8]
+  ldrb    r0, [r11, #-1]
+  tst     r0, #1
+  beq     .LBB0_2
+  ldr     r0, [r11, #-8]
+  ldr     r1, .LCPI0_3
+  mul     r0, r0, r1
+  ldr     r1, .LCPI0_0
+  bl      __aeabi_idiv
+  str     r0, [sp, #12]
+  ldr     r0, [sp, #12]
+  add     r0, r0, #50
+  str     r0, [sp, #12]
+  b       .LBB0_3
+.LBB0_2:
+  ldr     r0, [r11, #-8]
+  ldr     r1, .LCPI0_2
+  mul     r0, r0, r1
+  ldr     r1, .LCPI0_0
+  bl      __aeabi_idiv
+  str     r0, [sp, #12]
+  ldr     r0, [sp, #12]
+  add     r0, r0, #30
+  str     r0, [sp, #12]
+.LBB0_3:
+  ldr     r0, [sp, #12]
+  ldr     r1, [sp, #8]
+  add     r0, r0, r1
+  str     r0, [sp, #4]
+  ldr     r0, [sp, #4]
+  add     r0, r0, #5
+  ldr     r1, .LCPI0_4
+  bl      __aeabi_idiv
+  ldr     r1, .LCPI0_4
+  mul     r0, r0, r1
+  str     r0, [sp, #4]
+  ldr     r0, [sp, #4]
+  mov     sp, r11
+  pop     {r11, pc}
+    \end{lstlisting}
+\end{minipage}%
+\hspace{1cm}
+\begin{minipage}{0.45\textwidth}
+    \begin{lstlisting}[style=AsmStyle, numbers=right, belowskip=5\baselineskip]
+expandedComputeLoanPayment:
+  push    {r11, lr}
+  mov     r11, sp
+  sub     sp, sp, #24
+  and     r0, r0, #1
+  strb    r0, [r11, #-1]
+  str     r1, [r11, #-8]
+  mov     r0, #0
+  str     r0, [sp, #12]
+  ldr     r0, [r11, #-8]
+  lsl     r0, r0, #1
+  ldr     r1, .LCPI0_0
+  bl      __aeabi_idiv
+  str     r0, [sp, #8]
+
+  ldrb    r0, [r11, #-1]
+  cmp     r0, #0
+
+  ldrne   r0, [r11, #-8]
+  ldrne   r1, .LCPI0_3
+  mulne   r0, r0, r1
+  ldrne   r1, .LCPI0_0
+  blne    __aeabi_idiv
+  addne   r0, r0, #50
+  strne   r0, [sp, #12]
+
+  ldreq   r0, [r11, #-8]
+  ldreq   r1, .LCPI0_2
+  muleq   r0, r0, r1
+  ldreq   r1, .LCPI0_0
+  bleq    __aeabi_idiv
+  addeq   r0, r0, #30
+  streq   r0, [sp, #12]
+
+  ldr     r0, [sp, #12]
+  ldr     r1, [sp, #8]
+  add     r0, r0, r1
+  str     r0, [sp, #4]
+  ldr     r0, [sp, #4]
+  add     r0, r0, #5
+  ldr     r1, .LCPI0_4
+  bl      __aeabi_idiv
+  ldr     r1, .LCPI0_4
+  mul     r0, r0, r1
+  str     r0, [sp, #4]
+  ldr     r0, [sp, #4]
+  mov     sp, r11
+  pop     {r11, pc}
+    \end{lstlisting}
+\end{minipage}%

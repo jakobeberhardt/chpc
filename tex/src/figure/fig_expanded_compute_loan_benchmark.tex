@@ -1,0 +1,47 @@
+\begin{minipage}{0.42\textwidth}
+    \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                width=5.5cm,
+                height=7.5cm,
+                ybar,
+                symbolic x coords={Baseline, If-converted},
+                xtick=data,
+                ylabel={IPC (Percentage)},
+                ymin=0, ymax=150,
+                nodes near coords,
+                bar width=25pt,
+                axis lines=left,
+                enlarge x limits=0.5,
+                ytick={0,25,50,75,100,125,150},
+                every axis label/.append style={font=\normalsize},
+                every axis tick label/.append style={font=\small}
+            ]
+                \addplot[pattern=north east lines, pattern color=red] coordinates {(Baseline, 100) (If-converted, 118.18)};
+            \end{axis}
+        \end{tikzpicture}
+\end{minipage}
+\hfill
+\begin{minipage}{0.42\textwidth}
+    \centering
+    \begin{tikzpicture}
+        \begin{axis}[
+            width=5.5cm,
+            height=7.5cm,
+            ybar,
+            symbolic x coords={Baseline, If-converted},
+            xtick=data,
+            ylabel={Total Cycles (Percentage)},
+            ymin=0, ymax=150,
+            nodes near coords,
+            bar width=25pt,
+            axis lines=left,
+            enlarge x limits=0.5,
+            ytick={0,25,50,75,100,125,150},
+            every axis label/.append style={font=\normalsize},
+            every axis tick label/.append style={font=\small}
+        ]
+            \addplot[pattern=north east lines, pattern color=blue] coordinates {(Baseline, 100) (If-converted, 51.29)};
+        \end{axis}
+    \end{tikzpicture}
+\end{minipage}

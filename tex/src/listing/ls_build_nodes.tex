@@ -1,0 +1,31 @@
+\begin{lstlisting}[style=CStyle]
+struct Node* build_list(int64_t N, double percent_positive) {
+    struct Node* head = NULL;
+    struct Node* current = NULL;
+    int64_t i;
+
+    for (i = 0; i < N; i++) {
+        struct Node* new_node = (struct Node*)malloc(sizeof(struct Node));
+        if (new_node == NULL) {
+            fprintf(stderr, "Memory allocation failed %" PRId64 "\n", i);
+            exit(EXIT_FAILURE);
+        }
+
+        if ((rand() / (double)RAND_MAX) < percent_positive) {
+            new_node->wt = rand() % 100 + 1;
+        } else {
+            new_node->wt = -(rand() % 100 + 1);
+        }
+        new_node->next = NULL;
+
+        if (head == NULL) {
+            head = new_node;
+            current = new_node;
+        } else {
+            current->next = new_node;
+            current = new_node;
+        }
+    }
+    return head;
+}
+\end{lstlisting}

@@ -1,0 +1,15 @@
+\begin{lstlisting}[style=CStyle]
+clock_gettime(CLOCK_MONOTONIC, &start_time);
+    while (ptr != NULL) {
+        count++;
+        if(ptr->wt < 0) {
+            weight -= ptr->wt;
+        } else {
+            weight += ptr->wt;
+        }
+        struct Node* temp = ptr;
+        ptr = ptr->next;
+        free(temp);
+    }
+clock_gettime(CLOCK_MONOTONIC, &end_time);
+\end{lstlisting}

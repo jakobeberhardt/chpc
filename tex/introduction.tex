@@ -1,0 +1,28 @@
+\section{Introduction}
+Superscalar processors with deep pipelines and out-of-order execution represent the state of the art in processor architecture. Superscalar processors have multiple execution units which allows them to fetch, decode, and execute multiple instructions in parallel through separate pipeline stages within a single clock cycle. This increases the instruction throughput and allows for an Instructions Per Cycle (IPC) count greater than one. The latest main vendor's architectures, AMD Zen5 and Intel Alder Lake, feature cores that are respectively eight and six instructions wide. When talking about deep pipelines, we refer to the number of stages that the instructions have to go through from the fetch to the moment they are retired. High-performance designs employ different pipelines for different classes of instructions. For both the last generation of AMD and Intel desktop processors, the depth of the integer pipeline is estimated to be nineteen stages. When talking about Out-of-Order Execution, we refer to architecture design where instructions can be executed as soon as their input operands are ready, rather than strictly in the original program order. By executing instructions out of order, the processor can keep its execution units busy even when some instructions are stalled due to delays like cache misses or data dependencies. These design choices proved to deliver unmatched performances when provided with enough Instruction Level Parallelism (ILP). Based on the work of August et al.~\cite{August98}, the main obstacles to elevating ILP are control flows which are hard to predict, and ambiguous memory dependencies. 
+
+\subsection{The Cost of Branch Misprediction}
+\label{sec:costo_of_branch_prediction}
+The reason why branch mispredictions represent a big obstacle for modern machines has to do with the design choices described so far. Another central component of modern designs are branch predictors. Branch predictors allow for one side of conditional branches to be speculatively executed before the branch is committed. When the speculated side and the evaluated side coincide, we have the benefit of keeping the pipeline full and executing instructions ahead of time. When these speculations fail, the speculatively executed instructions have to be discarded and the correct branch target needs to be executed. Due to out-of-order execution, between the time the branch is speculatively executed and the time it is evaluated, a high number of instructions might have been retired. In addition to this, as the pipelines are deep, several cycles have to pass before the pipeline is filled again. Based on the work of Kwan Lin et al. ~\cite{lin2019branch}, branch misprediction accounts for 20\% of the IPC in modern processors and represents the main limit to having deeper, more efficient pipelines. A good empirical average measure of the cost of a branch misprediction comes from the weight used in the heuristics of \textit{llvm}\cite{Lattner2004LLVM} reported in table \ref{tab:misprediction_penalty}.
+
+\begin{table}[H]
+    \captionsetup{type=table}
+    \centering
+    \input{src/table/tab_penalties_1}
+    \caption[Branch Misprediction Penalty]{Branch Misprediction Penalty and Optimistic Load Cost used in \textit{llvm}'s heuristics for various Intel and ARM architectures.}
+    \label{tab:misprediction_penalty}
+\end{table}
+
+From the weights used in \textit{llvm} for both branch mispredictions and optimistic load costs, we can conclude that a branch misprediction, in modern high-performance architecture, is three times more expensive than a load operation that hits in the L1 cache. Certain design choices peculiar to the embedded field make the cost of branch misprediction higher or lower. The data regarding \texttt{Cortex R52} and \texttt{Cortex M4} has been cherry-picked precisely to describe this. The \texttt{Cortex R52} is a design that implements advanced safety features like lockstep redundancy, which introduces further overhead in case of misprediction. Due to these characteristics, it has a misprediction penalty to load cost ratio of 8:1. The \texttt{Cortex M4} is also an embedded processor but has a three-stage pipeline and executes instructions in order. This results in a ratio of branch misprediction cost to load cost of 1:1. The way the weights reported are used by the compiler's heuristics are treated in more detail in subsection \ref{sec:compiler_heuristics} and in subsection~\ref{sec:predication_benchmark}.
+
+\subsection{Compilation techniques to improve IPC}
+Two techniques have been introduced into compilers to try to mitigate the obstacles to high IPC described so far:
+
+\begin{itemize}
+    \item \textbf{Speculation}: A technique where the compiler makes assumptions about the program’s behavior to generate optimized code paths, potentially executing certain operations early or avoiding them entirely. If the speculated outcomes are incorrect at runtime, mechanisms like rollback or patching are used to maintain correctness. This has not to be confused with branch prediction, which is part of the microarchitectural level.
+    \item \textbf{Predication}: Instead of using conditional branches to decide which instructions to execute, predicated instructions execute all possible paths but only commit the results of the path that meets a specific condition, known as the predicate. This is only possible when the Instruction Set Architecture (ISA) supports predicated instructions.
+\end{itemize} 
+
+We will discuss how Speculation and Predication may help deliver higher performances respectively in section \ref{sec:predication} and in section~\ref{sec:speculation}.
+
+\newpage

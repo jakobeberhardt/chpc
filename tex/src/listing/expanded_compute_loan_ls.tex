@@ -1,0 +1,21 @@
+\begin{lstlisting}[style=CStyle]
+#include <cstdint>
+
+uint32_t computeLoanPayment(bool isHouseLoan, uint32_t principal) 
+{ 
+    uint32_t baseRate = 0; 
+@    uint32_t tax = principal * 2 / 100; 
+    
+    if (isHouseLoan) {
+         baseRate = principal * 5 / 100; 
+@@       baseRate += 50; 
+    } else { 
+        baseRate = principal * 7 / 100; 
+@@      baseRate += 30; 
+    } 
+    
+@@    uint32_t totalPayment = baseRate + tax; 
+@@    totalPayment = (totalPayment + 5) / 10 * 10; 
+    return totalPayment; 
+}
+\end{lstlisting}

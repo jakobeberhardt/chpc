@@ -1,0 +1,19 @@
+\begin{lstlisting}[style=CStyle]
+avg = 0;
+weight = 0;
+count = 0;
+
+while (ptr != NULL) {
+	count++;
+	if(ptr->wt < 0) {
+		weight -= ptr->wt;
+	} else {
+		weight += ptr->wt;
+	}
+	ptr = ptr->next;
+}
+
+if(count !=0) {
+	avg = weight / count;
+}
+\end{lstlisting}
