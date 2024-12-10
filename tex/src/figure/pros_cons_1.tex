@@ -1,0 +1,19 @@
+\begin{columns}[t] % The `[t]` aligns columns at the top
+    \column{0.5\textwidth}
+        \textbf{Pros}
+        \begin{itemize}
+            \setbeamertemplate{itemize items}{\textcolor{green}{$\uparrow$}}
+            \item Reduces Code Size
+            \setbeamertemplate{itemize items}{\textcolor{white}{\textbf{\boldmath$\Uparrow$}}}
+            \item \textcolor{white}{Removes Branches}
+            \begin{itemize}
+                \setbeamertemplate{itemize items}{\textcolor{white}{$\bullet$}}
+                \item  \textcolor{white}{Removes branch misprediction penalty}
+                \item  \textcolor{white}{Improves IPC}
+                \item  \textcolor{white}{Makes execution time predictable}
+            \end{itemize}
+        \end{itemize}
+
+    \column{0.5\textwidth}
+
+\end{columns}

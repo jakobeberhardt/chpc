@@ -1,0 +1,89 @@
+\begin{lstlisting}[style=AsmStyle]
+add r2, r2, 1     ; I1: Increment count
+ldr r4, 0[r1]     ; I2: Load ptr->wt into r4
+btl L1, r4, 0     ; I3: If wt < 0, branch to L1
+add r3, r3, r4    ; I4: Add wt to weight
+ldr r5, 4[r1]     ; I5: Load ptr->next into r5
+beq L3, r5, 0     ; I6: If next is NULL, jump to L3
+add r2, r2, 1     ; I7: Increment count
+ldr r6, 0[r5]     ; I8: Load next->wt into r6
+btl L1X, r6, 0    ; I9: If wt < 0, restore r1 and r4 
+add r3, r3, r6    ; I10: Add wt to weight
+ldr r1, 4[r5]     ; I11: Move ptr to ptr->next->next
+bne L0, r1, 0     ; I12: Loop to L0 if ptr != NULL
+\end{lstlisting}
+
+% FULL BELOW
+% % \begin{lstlisting}[style=AsmStyle]
+% % 	ldr r1, _ptr
+% % 	mov r7, 0
+% % 	mov r2, 0
+% % 	mov r3, 0
+% % 	beq L3, r1, 0
+% % L0:
+% % 	add r2, r2, 1  ; I1
+% % 	ldr r4, 0[r1]  ; I2
+% % 	btl L1, r4, 0  ; I3
+% % 	add r3, r3, r4 ; I4
+% % 	ldr r5, 4[r1]  ; I5
+% % 	beq L3, r5, 0  ; I6
+% % 	add r2, r2, 1  ; I7
+% % 	ldr r6, 0[r5]  ; I8
+% % 	btl L1X, r6, 0 ; I9
+% % 	add r3, r3, r6 ; I10
+% % 	ldr r1, 4[r5]  ; I11
+% % 	bne L0, r1, 0  ; I12
+% % L3:
+% % 	beq L4, r2, 0
+% % 	div r7, r3, r2
+% % 	str _avg, r7
+% % L4:
+
+% % ; ...
+
+% % L1X:
+% % 	mov r1, r5
+% % 	mov r4, r6
+% % L1: 
+% % 	sub r3, r3, r4
+% % 	ldr r1, 4[r1]
+% % 	bne L0, r1, 0
+
+% % \end{lstlisting}
+
+
+% \begin{lstlisting}[style=AsmStyle]
+%     ldr r1, _ptr      ; Load initial pointer, Initialize avg, count and weight
+%     mov r7, 0         
+%     mov r2, 0         
+%     mov r3, 0         
+%     beq L3, r1, 0     
+% L0:
+%     add r2, r2, 1     ; I1: Increment count
+%     ldr r4, 0[r1]     ; I2: Load ptr->wt into r4
+%     btl L1, r4, 0     ; I3: If wt < 0, branch to L1
+%     add r3, r3, r4    ; I4: Add wt to weight
+%     ldr r5, 4[r1]     ; I5: Load ptr->next into r5
+%     beq L3, r5, 0     ; I6: If next is NULL, jump to L3
+%     add r2, r2, 1     ; I7: Increment count
+%     ldr r6, 0[r5]     ; I8: Load next->wt into r6
+%     btl L1X, r6, 0    ; I9: If wt < 0, branch to L1X
+%     add r3, r3, r6    ; I10: Add wt to weight
+%     ldr r1, 4[r5]     ; I11: Move ptr to ptr->next->next
+%     bne L0, r1, 0     ; I12: Loop back to L0 if ptr != NULL
+% L3:
+%     beq L4, r2, 0     ; If count == 0, skip division
+%     div r7, r3, r2    
+%     str _avg, r7      
+% L4:
+
+% ; ...
+
+% L1X:
+%     mov r1, r5        ; Adjust ptr to second node (ptr = ptr->next)
+%     mov r4, r6        ; Move wt to r4 for subtraction
+% L1: 
+%     sub r3, r3, r4    ; Subtract wt from weight (negative wt)
+%     ldr r1, 4[r1]     ; Move ptr to ptr->next
+%     bne L0, r1, 0     ; Loop back to L0 if ptr != NULL
+% \end{lstlisting}

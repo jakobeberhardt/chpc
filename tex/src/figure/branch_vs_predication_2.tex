@@ -9,14 +9,17 @@ else y = 20;
 \adjustbox{valign=m}{%
 \begin{tikzpicture}
     \draw[->, line width=0.5pt] (0,0.5) -- (2, 1.5);
-    \draw[->, line width=0.5pt] (0,-0.5) -- (2, -1.5);
+    \draw[->, line width=0.5pt, white] (0,-0.5) -- (2, -1.5);
 \end{tikzpicture}
 }
 &
 \adjustbox{valign=m}{%
 \begin{minipage}{0.4\textwidth}
 \textbf{Before If-Conversion:}
-\begin{lstlisting}[basicstyle=\ttfamily\small]
+\begin{lstlisting}[
+    basicstyle=\ttfamily\small, 
+    numbers=none
+]
     cmp r0, #0
     bgt greater
     mov r1, #20
@@ -26,10 +29,17 @@ greater:
 end:
 \end{lstlisting}
 
+
 \vspace{0.8cm} % Space between the two assembly listings
 
-\textbf{With If-Conversion:}
-\begin{lstlisting}[basicstyle=\ttfamily\small]
+\textbf{\textcolor{white}{With If-Conversion:}}
+\begin{lstlisting}[
+    basicstyle=\ttfamily\small\color{white}, 
+    keywordstyle=\color{white}, 
+    commentstyle=\color{white}, 
+    stringstyle=\color{white}, 
+    numbers=none
+]
     cmp r0, #0
     movgt r1, #10
     movle r1, #20

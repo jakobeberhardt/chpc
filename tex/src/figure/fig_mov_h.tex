@@ -2,7 +2,7 @@
 \begin{tikzpicture}[scale=0.35, every node/.style={scale=0.35}]
     % Bit fields with adjusted widths and labels for clarity
     \draw[thick] (0,0) rectangle (4,2) node[midway, yshift=0.4cm] {\textbf{\LARGE Condition}};
-    \node at (2, 0.6) {\LARGE GT: 1100};
+    \node at (2, 0.6) {\textcolor{red}{\LARGE AL: 1110}};
     
     \draw[thick] (4,0) rectangle (8,2) node[midway, yshift=0.4cm] {\textbf{\LARGE Opcode}};
     \node at (6, 0.6) {\LARGE MOV: 1101};
@@ -30,5 +30,7 @@
     \draw[thick] (29,-0.4) -- (29,-0.8) node[below] {\LARGE 29};
     \draw[thick] (32,-0.4) -- (32,-0.8) node[below] {\LARGE 31};
 
+    % Arrow for full bit length label
+    \draw[<->, thick] (0,-1.8) -- (32,-1.8) node[midway, below, yshift=-0.3cm] {\LARGE 32 bits};
 \end{tikzpicture}
 \end{center}

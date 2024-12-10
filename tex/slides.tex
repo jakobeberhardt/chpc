@@ -3,13 +3,16 @@
 \usefonttheme{structurebold}
 \usetheme{Madrid} 
 \usecolortheme{seahorse}
+\usepackage{adjustbox}
+\usepackage{fontawesome}
+
 
 \title{Predication and Speculation}%Titel
 \subtitle{Compilers for High Performance Computers}%Untertitel
 \author{Stefano Petrilli\\ \texttt{stefano.petrilli@upc.edu}\\[1ex] % [1ex] adds vertical space
   Jakob Eberhardt\\ \texttt{jakob.eberhardt@estudiantat.upc.edu}}
 %\institute{Universitat Politècnica de Catalunya}
-\date{\today{}}
+\date{December 10, 2024}
 \setbeamertemplate{footline}{
    \leavevmode%
    \hbox{%
@@ -17,7 +20,7 @@
      Stefano Petrilli, Jakob Eberhardt%Kann auch leer sein
    \end{beamercolorbox}%
    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
-     \today{}
+     December 10, 2024{}
    \end{beamercolorbox}%
    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
      \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
@@ -28,164 +31,560 @@
 \begin{document}
 \frame{\titlepage}
 
-\begin{frame}[fragile]{Problem Introduction}
-    \input{src/listing/ls_problem_intro}
-    \captionof{lstlisting}{For \texttt{size=100000000}, we take 1.348 seconds}
-    \label{lst:baseline_c} 
-\begin{block}{Conditional Codes}
-    \begin{itemize}
-        \item Concern control flow of the program
-        \item Jump to a different instruction based on a condition
-        \item May effect performance
-    \end{itemize}
-\end{block}
-\end{frame}
+% \begin{frame}[fragile]
+% \frametitle{Modern Processors}
+% \begin{center}
+%     {\LARGE State-of-the-art high performance processors} \\ {\LARGE are Superscalar, have deep Pipelines, and} \\ {\LARGE execute the instructions Out of Order.}
+% \end{center}
+% \end{frame}
 
-\begin{frame}[fragile]{Instructions have to wait for dependencies}
-    \begin{center}
-        \resizebox{0.75\textwidth}{!}{
-            \input{src/listing/ls_asm_standard}
-        }
-    \end{center}
-    
-    \vspace{0cm}
-    \begin{figure}
-        \centering
-        \resizebox{0.73\textwidth}{!}{
-            \input{src/figure/fig_pipeline_1} % Include the figure from an external file.
-        }
-        \caption{We need to wait for \texttt{data[i]} to be written back to \texttt{w0} for the comparison. We also need to wait for \texttt{b.ge} to finish to know which instruction to fetch next}
-        \label{fig:pipeline-stages}
-    \end{figure}
-\end{frame}
-
-
-\begin{frame}[fragile]{Instructions have to wait for dependencies}
-    \begin{block}{Problem}
-        \begin{itemize}
-            \item We have to wait for \texttt{data[i]} to be loaded
-            \item We cannot exploit available resources 
-            \item We do not know which instruction to fetch next
-            \item Pipeline stalls, IPC$\downarrow$
-            \item \textbf{We need to reduce the cost of conditional branching}
-        \end{itemize}
-        \end{block}
-    \vspace{0cm}
-    \begin{figure}
-        \centering
-        \resizebox{\linewidth}{!}{
-            \input{src/figure/fig_pipeline_intro_cachemiss}
-        }
-        \caption{A Cache miss may effect the pipeline even more.}
-        \label{fig:pipeline-diagram}
-    \end{figure}
-
-\end{frame}
-
-\begin{frame}{Methods}
-\begin{center}
-\input{src/figure/fig_hardware_software}
-\end{center}
-\begin{itemize}
-    \item \textbf{Speculation}
-        \begin{itemize}
-            \item Speculate about control flow at run time while compiling
-            \item Generate additional code, e.g., compensation code 
-        \end{itemize}
-    \item \textbf{Predication}
-        \begin{itemize}
-            \item Execute multiple branches
-            \item Select correct result when condition arrives
-            \item Requires special instructions, e.g., \texttt{cmov}
-        \end{itemize}
-    \item \textcolor{gray}{\textbf{Prediction}} 
-        \begin{itemize}
-            \item \textcolor{gray}{Try to predict control flow during run time}
-            \item \textcolor{gray}{Using a hardware structure such as a branch predictor}
-        \end{itemize}
+\begin{frame}[fragile]
+\frametitle{Modern Processors}
+\begin{itemize}[<+->]
+    \item Superscalar
+    \item Deep Pipelines
+    \item Out of Order
+    \item \textbf{How do we keep the pipeline busy?}
 \end{itemize}
-
 \end{frame}
 
-\begin{frame}{Speculation}
-    \begin{block}{Definition}
-    "An instruction is \textit{speculatively} executed if it is moved above a conditional branch that it is control dependent upon"~\cite{chang95}
+
+% \begin{frame}
+%     \vfill
+%     \begin{center}
+%         {\Huge Why?}
+%     \end{center}
+%     \vfill
+% \end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Misprediction Penalty vs Optimal Load}
+\begin{center}
+    \input{src/table/tab_penalties_1}
+    \captionof{table}{Penalty assumptions used in LLVM for different architectures.}
+\end{center}
+\end{frame}
+
+% \begin{frame}[fragile]
+% \frametitle{Predication and Speculation}
+% \input{src/figure/fig_hardware_software}
+% \end{frame}
+
+\begin{frame}{Compiler-Controlled Speculation}
+\begin{itemize}
+    \item During runtime, we only know the pipeline
+    \item During compilation, we know the global picture
+\end{itemize}
+    \begin{block}{Speculative Execution}
+        \begin{itemize}
+            \item Make assumptions about future control flow
+            \item \textbf{Execute before we know we need the result} 
+            \item This includes moving instructions across branches
+            \item \textbf{Risk:} May alter the program's execution \& result
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Restrictions for Speculation}
+    \begin{center}
+        \begin{minipage}{0.45\textwidth}
+            \centering
+            \input{src/listing/ls_default_upmotion}
+        \end{minipage}
+        \hfill
+        \begin{minipage}{0.45\textwidth}
+            \centering
+            \input{src/listing/ls_faulty_upmotion}
+        \end{minipage}
+    \end{center}
+    \vspace{-0.9cm}
+    \begin{center}
+        \captionsetup{type=Listing}
+        \captionof{lstlisting}{If we could schedule \texttt{sdiv} earlier, we likely increase ILP. However, it may overwrite \texttt{r2} used in \texttt{taken} or throw an exception}
+        \label{fig:restrictions_speculation}
+    \end{center}
+        \vspace{-1cm}
+        %If we want to move an instruction \texttt{I} above its control branch \texttt{Br}:
+    \begin{block}{If we want to move an instruction I above its branch Br:}
+        \begin{itemize}
+            \item \textbf{Restriction 1}: The destination register of I is not used as a source if Br is taken
+            \item \textbf{Restriction 2}: Instruction I will not cause an exception which will alter the program
+execution if Br is taken.
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Computing the Average of Absolute Values}
+    \begin{columns}[T]
+        \begin{column}{0.53\textwidth}
+            \begin{itemize}
+                \item Go through all nodes
+                \item If \texttt{wt} is negative, subtract it from \texttt{weight}
+                \item Else, add it to \texttt{weight}
+                \item Compute \texttt{avg} if we had at least one node
+            \end{itemize}
+        \end{column}
+
+        \begin{column}{0.45\textwidth}
+            \begin{minipage}{\textwidth}
+                \input{src/listing/ls_c_chang_full_default}
+                \label{ls:ls_c_chang_full_default}
+            \end{minipage}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Steps}
+        \begin{block}{Typical Ingredients}
+        \begin{enumerate}
+            \item Identify \textit{trace}
+            \item Superblock creation
+            \item Dependency graph (based on architectural model)
+            \item List scheduling
+        \end{enumerate}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Control Flow Profile}
+    \begin{columns}[T]
+        \begin{column}{0.47\textwidth}
+            \begin{block}{Profiling}
+                \begin{itemize}
+                    \item Collect execution data
+                    \item Facilitate optimization decisions
+                    \item E.g. in LLVM~\cite{llvm_profdata} with \texttt{-fprofile-instr-generate}
+                \end{itemize}
+            \end{block}
+            \begin{itemize}
+                \item The loop part BB2 to BB5 is interesting
+                \item 90\% of the weights are positive
+            \end{itemize}
+        \end{column}
+
+        \begin{column}{0.53\textwidth}
+            \centering
+            \input{src/figure/fig_controlflow_full}
+            \captionof{figure}{Weighted Control Flow Graph with profiling data of Chang~\cite{chang95}}
+            \label{fig:controlflow_full}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Loop Part as a Superblock}
+    \begin{minipage}{0.89\textwidth}
+        \centering
+        \begin{minipage}{0.38\textwidth}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \input{src/figure/fig_controlflow_side_enterance}
+            }
+            \label{fig:controlflow_side_enterance}
+        \end{minipage}\hfill
+        \begin{minipage}{0.58\textwidth}
+            \centering
+            \resizebox{\textwidth}{!}{%
+                \input{src/figure/fig_controlflow_superblock}
+            }
+            \label{fig:controlflow_superblock}
+        \end{minipage}
+    \end{minipage}
+
+    \vspace{-0.7cm}
+    \begin{minipage}{\textwidth}
+        \centering
+        \captionof{figure}{Loop before and after Superblock creation~\cite{chang95}. BB5 is duplicated in BB3'}
+    \end{minipage}
+
+    \begin{minipage}{\textwidth}
+        \begin{block}{BB2 $\rightarrow$ BB4 $\rightarrow$ BB5 is the hot part (\textit{trace})}
+            \begin{itemize}
+                \item Superblocks reduce bookkeeping~\cite{sb_art}
+                \item No need to consider side entrances when scheduling a superblock
+            \end{itemize}
+        \end{block}
+    \end{minipage}
+\end{frame}
+
+
+\begin{frame}{Models for Speculative Scheduling}
+    \begin{block}{Different Code Percolation Models}
+        \begin{itemize}
+            \item Enable different levels of speculation
+            \item And hence different levels of performance
+            \item Can alter the result of the program
+            \item Require additional hardware
+        \end{itemize}
+    \end{block}
+    \vspace{0.9cm}
+        \input{src/figure/fig_spec_support_hw}
+\end{frame}
+
+\begin{frame}{Scheduling our Superblock (Report page 22)}
+    \begin{center}
+    \begin{minipage}{1\textwidth}
+        \begin{center}
+                \resizebox{0.57\textwidth}{!}{
+                    \begin{minipage}{\textwidth}
+                        \input{src/listing/ls_chang_asm_example_as_sb_slide}
+                    \end{minipage}
+                }
+        
+        \vspace{-0.2cm}
+        \captionsetup{type=Listing}
+        \captionof{lstlisting}{The loop part of the superblock was unrolled once. We assume a one-cycle latency for ALU instructions and a two-cycle load delay.}
+        \end{center}
+        \end{minipage}
+    \end{center}
+\end{frame}
+
+%%% Restricted %%%
+\begin{frame}{Restricted Code Percolation}
+    \begin{block}{Properties of Restricted Code Percolation}
+        \begin{itemize}
+            \item \textit{Avoid errors} category~\cite{bringmannMH95}
+            \item Compiler cannot move excepting instructions above branches
+            \item Other instructions which fulfill Restriction 1 can be moved
+                \begin{itemize}
+                    \item E.g. after renaming
+                \end{itemize}
+            \item Requires no additional hardware
+            \item No extra load on DCache
+        \end{itemize}
+    \end{block}
+    \begin{block}{Safe Code Percolation Extension~\cite{bringmannMH95}}
+        \begin{itemize}
+            \item Restriction 2 can be relaxed 
+            \begin{itemize}
+                \item If there is a proof that the instructions will never cause an exception
+            \end{itemize}     
+            \item Typically speculative loads by check allocation boundaries
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Restricted Code Percolation}
+    \begin{center}
+    \begin{minipage}{.52\textwidth}
+        \begin{figure}[H]
+            \centering
+            \input{src/figure/fig_restricted_cfg}
+            \caption{Nine dashed control dependencies and twelve data dependencies (\textbf{f}low, \textbf{o}utput) under restricted percolation~\cite{chang95}.}
+            \label{fig:restric_cfg}
+\end{figure}
+    \end{minipage}\hfill
+    \begin{minipage}{.46\textwidth}
+    \begin{figure}[H]
+            \centering
+            \resizebox{1\textwidth}{!}{
+            \input{src/figure/fig_restricted_spec}
+        }
+        \caption{The schedule tableau is quite sparse. Loads have to stay in their home block. After \texttt{C1}, all data dependencies for \texttt{I7} are available.}
+        \label{fig:restricted_motion}
+\end{figure}
+    \end{minipage}
+\end{center} 
+\end{frame}
+
+\begin{frame}{But \texttt{I7}'s destination \texttt{r2} is in \texttt{live-out(I6)}}
+    \input{src/listing/frame_full_chang_asm_liveout}
+\end{frame}
+%%% %%% %%%
+
+
+%%% General %%%
+\begin{frame}{General Code Percolation}
+    \begin{block}{Properties of General Code Percolation}
+        \begin{itemize}
+            \item \textit{Ignore errors} category
+            \item Lifts Restriction 2 by simply ignoring exceptions
+            \item Requires non-excepting counterpart instructions
+        \end{itemize}
     \end{block}
     \begin{itemize}
-        \item \textbf{Compiler-controlled}
-            \begin{itemize}
-              \item Speculate about real control flow
-              \item Try to enable other optimization opportunities
-        \end{itemize}
-        \item \textbf{Control Speculation}
-        \begin{itemize}
-               \item Execute instructions before control flow was determined 
-        \end{itemize}
-        \item \textbf{Data Speculation}
-        \begin{itemize}
-            \item Execute instructions with potentially wrong data 
-        \end{itemize}
+        \item E.g., if a load accesses an invalid address, its destination will be garbage
+        \item May cause an actual exception later if the result is used
     \end{itemize}
 \end{frame}
 
-\begin{frame}{Exceptions}
-        \input{src/table/tab_safe_unsafe}
+\begin{frame}{General Code Percolation}
+    \begin{center}
+    \begin{minipage}{.52\textwidth}
+        \begin{figure}[H]
+            \centering
+            \input{src/figure/fig_general_cfg}
+            \caption{Dependence Graph for General Code Percolation with six control dependencies~\cite{chang95}.}
+\end{figure}
+    \end{minipage}\hfill
+    \begin{minipage}{.46\textwidth}
+\begin{figure}[H]
+            \centering
+            \resizebox{1\textwidth}{!}{
+            \input{src/figure/fig_general_schedule}
+        }
+        \caption{By lifting Restriction 2, we are able to schedule the loads earlier at the cost of eventual errors. E.g., \texttt{I8} which is now above \texttt{I6} (\texttt{next == null}) will cause errors.}
+\end{figure}
+    \end{minipage}
+\end{center} 
 \end{frame}
-    
+%%% %%% %%%
+
+%%% Boosting %%%
+\begin{frame}{Boosting Code Percolation}
+    \begin{block}{Properties of Boosting Code Percolation}
+        \begin{itemize}
+            \item \textit{Resolve errors}
+            \item Lifts Restriction 1 \& 2 with additional hardware support
+            \item Temporarily hold side effects of a boosted instruction
+            \begin{itemize}
+                \item Until its branch is executed 
+            \end{itemize}
+        \end{itemize}
+    \end{block}
+\end{frame}
+
+\begin{frame}{Hardware for Boosting}
+   \begin{itemize}
+       \item Superblock $\rightarrow$ Boosted instruction is in the not-taken part 
+       \item 1 to N bits $\rightarrow$ above how many branches the instruction was moved
+       \item Not taken while boosted instructions are in the pipeline $\rightarrow$ remove bit
+       \item Taken while boosted instructions are in the pipeline $\rightarrow$ squash them
+   \end{itemize} 
+    \begin{block}{Shadow Register File \& Shadow Store Buffer~\cite{10.1145/325164.325160}}
+        \begin{itemize}
+       \item If boosted instruction writes back before its branch $\rightarrow$ keep its result
+       \begin{itemize}
+           \item And delay exception handling until we know the branch outcome
+       \end{itemize}
+       \item If branch is not taken $\rightarrow$ copy result into real register or store buffer
+       \begin{itemize}
+           \item If there was an exception, re-execute not-taken part in-order
+       \end{itemize}
+       \item If branch is taken $\rightarrow$ squash shadow values, ignore exceptions and go to branch target
+   \end{itemize} 
+    \end{block}
+\end{frame}
+
+
+\begin{frame}{Boosting Code Percolation}
+    \begin{center}
+    \begin{minipage}{.52\textwidth}
+        \begin{figure}[H]
+            \centering
+            \input{src/figure/fig_general_cfg}
+            \caption{If we boost above one branch, we have three control dependencies left~\cite{chang95}.}
+            \label{fig:boosting_cfg}
+    \end{figure}
+    \end{minipage}\hfill
+    \begin{minipage}{.46\textwidth}
+    \begin{figure}[H]
+            \centering
+            \resizebox{1\textwidth}{!}{
+            \input{src/figure/fig_boosting_schedule}
+        }
+        \caption{\texttt{I7} can be scheduled in \texttt{C2}. The incremented \texttt{count} variable will be copied into the real register once branch \texttt{I6} commits and was not taken.}
+        \label{fig:boosted_motion}
+    \end{figure}
+    \end{minipage}
+    \end{center} 
+\end{frame}
+
+\begin{frame}{Practical Study}
+    \begin{center}
+        \resizebox{0.65\columnwidth}{!}{
+            \input{src/figure/fig_specplot}
+        }
+        \captionof{figure}{99\% positive weights during profiling, increasing percentage of negative weight during benchmarking.}
+    \end{center} 
+\end{frame}
+
+\begin{frame}{Predication}
+    \centering
+    \LARGE Many branches are hard to predict.
+\end{frame}
+
+\begin{frame}{Predicated Instructions}
+\begin{center}
+\begin{tikzpicture}[
+    every node/.style={font=\large},
+]
+    \node<1> (movgt1) {%
+        {\LARGE MOVGT R1 R0}%
+    };
+    \node<2> (movgt2) {%
+        {\LARGE \underline{MOV}GT R1 R0}%
+    };
+    \node<3> (movgt3) {%
+        {\LARGE MOV\underline{GT} R1 R0}%
+    };
+    \node<4> (movgt4) {%
+        {\LARGE MOVGT R1 R0}%
+    };
+
+\end{tikzpicture}
+\end{center}
+\end{frame}
+
+\begin{frame}{Minimal Predication Example}
+    \only<1>{% First view
+        \begin{figure}
+        \input{src/figure/branch_vs_predication_1}
+        \end{figure}
+    }
+    \only<2>{% Second view
+        \begin{figure}
+        \input{src/figure/branch_vs_predication_2}
+        \end{figure}
+    }
+    \only<3>{% Third view
+        \begin{figure}
+        \input{src/figure/branch_vs_predication}
+        \end{figure}
+    }
+\end{frame}
+
 \begin{frame}[fragile]
-\frametitle{Predicated Execution without Branching}
-
-\begin{lstlisting}[style=AsmStyle]
-loop_predicated:
-    cmp w21, w20                    // compare i with size
-    b.ge end_predicated             // if i >= size, exit loop
-
-    ldr w0, [x19, w21, UXTW #2]     // w0 = data[i]
-    cmp w0, #50
-    csel w0, wzr, w0, lt            // if w0 < 50, w0 = 0; else w0 = w0
-    str w0, [x19, w21, UXTW #2]     // data[i] = w0
-
-    add w21, w21, #1                // i++
-    b loop_predicated
-\end{lstlisting}
-
+\frametitle{Predication}
+\begin{center}
+    \scalebox{0.95}{          
+        \begin{tikzpicture}[align=center]
+        
+        \draw[arrows={Stealth[length=3mm]-Stealth[length=3mm]}, thick] (0,0) -- (10,0);
+        
+        % Place labels at the ends
+        \node[below] at (0,0) {Software};
+        \node[below] at (10,0) {Hardware};
+        
+        \node[above] at (2,0) {Speculation};
+        \node[above] at (5,0) {Predication};
+        \node[above] at (8,0) {Prediction};
+        
+        \end{tikzpicture}
+    }
+\end{center}
 \end{frame}
 
-\begin{frame}[fragile]
-\frametitle{Speculative Execution with Branching}
-
-\begin{lstlisting}[style=AsmStyle]
-loop_speculative:
-    cmp w21, w20                // compare i with size
-    b.ge end_speculative        // if i >= size, exit loop
-
-    ldr w0, [x19, w21, UXTW #2] // w0 = data[i]
-    cmp w0, #50
-    b.ge skip_update            // if data[i] >= 50, skip update
-    mov w0, #0                  // w0 = 0
-    str w0, [x19, w21, UXTW #2] // data[i] = w0
-skip_update:
-    add w21, w21, #1            // i++
-    b loop_speculative
-\end{lstlisting}
+\begin{frame}{ARMv7 Predication}
+\centering
+    {\LARGE MOVGT vs MOV}
+    \only<1>{
+        \input{src/figure/fig_movgt}
+        \input{src/figure/fig_mov}
+    }
+    \only<2>{
+        \input{src/figure/fig_movgt_h}
+        \input{src/figure/fig_mov_h}
+    }
 \end{frame}
 
+\begin{frame}{If-converting a real function}
+    \only<1>{
+    \begin{figure}
+        \centering
+        \end{figure}    
+    }
+    \only<2>{
+    \begin{figure}
+        \centering
+        \input{src/listing/ls_calculate_loan_1}
+        \end{figure}    
+    }
+    \only<3> {
+        \begin{figure}
+        \centering
+        \input{src/listing/ls_calculate_loan}
+        \end{figure}   
+    }
+\end{frame}
 
+\begin{frame}{If-converting a real function}
+    \only<1>{% First view
+        \begin{figure}
+            \centering
+            \input{src/listing/ls_calculate_loan_asm_1}
+        \end{figure}
+    }
+    \only<2>{% Second view
+        \begin{figure}
+            \centering
+            \input{src/listing/ls_calculate_loan_asm_2}
+        \end{figure}
+    }
+    \only<3>{% Third view
+        \begin{figure}
+            \centering
+            \input{src/listing/ls_calculate_loan_asm_3}
+        \end{figure}
+    }
+    \only<4>{% Sixth view
+        \begin{figure}
+            \centering
+            \input{src/listing/ls_calculate_loan_asm_6}
+        \end{figure}
+    }
+\end{frame}
 
-% \input{misc/intro}
-% \input{misc/bullet_with_figure}
-% \input{misc/bullet_with_two_figures}
-% \input{misc/block_and_list}
-% \input{misc/two-side-by-side}
-% \input{misc/three-side-by-side}
-% \input{misc/basic_plot}
-% \input{misc/stencil}
-% \input{misc/two-side-by-side}
-% \input{misc/listing}
+\begin{frame}{If-converting a real function, benchmarks}
+    \only<1>{% First view (empty slide)
+        % Intentionally left blank
+    }
+    \only<2>{% Second view
+        \input{src/figure/fig_benchmarks_ifconverted}
+    }
+\end{frame}
 
+\begin{frame}{Pros and Cons of Predication}
+    \only<1>{% First view
+        \input{src/figure/pros_cons_1}
+    }
+    \only<2>{% Second view
+        \input{src/figure/pros_cons_2}
+    }
+    \only<3>{% Third view
+        \input{src/figure/pros_cons_3}
+    }
+    \only<4>{% Fourth view
+        \input{src/figure/pros_cons_4}
+    }
+    \only<5>{% Fifth view
+        \input{src/figure/pros_cons_5}
+    }
+    \only<6>{% Sixth view
+        \input{src/figure/pros_cons_6}
+    }
+    \only<7>{% Seventh view
+        \input{src/figure/pros_cons_7}
+    }
+    \only<8>{% Eighth view
+        \input{src/figure/pros_cons}
+    }
+\end{frame}
 
-
-\begin{frame}[allowframebreaks]{References \& Questions}
+\begin{frame}[allowframebreaks]{Questions \& References}
     \printbibliography
 \end{frame}
+
+\begin{frame}{Backup: Speculation Code Example}
+    \input{src/listing/frame_full_chang_asm}
+\end{frame}
+
+\begin{frame}{Sentinel Scheduling}
+    
+    \begin{block}{Properties of Sentinel Scheduling~\cite{10.1145/161541.159765}}
+        \begin{itemize}
+            \item \textit{Resolve errors}
+            \item Lifts Restriction 2
+            \item Split excepting instructions into two:
+            \item Operation-part which can be moved
+            \item Sentinel-part remains in home block and checks for exceptions
+        \end{itemize}
+    \end{block}
+    \begin{block}{Hardware for Sentinel Scheduling}
+        \begin{itemize}
+            \item Additional bit in opcode to mark speculative instructions
+            \item Registers need exception tag 
+            \item Sentinel instruction (a \texttt{mov})
+        \end{itemize}
+    \end{block}
+\end{frame}
+
 \end{document}

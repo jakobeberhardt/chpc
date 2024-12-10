@@ -1,0 +1,40 @@
+    \begin{columns}[t] % The `[t]` aligns columns at the top
+        \column{0.5\textwidth}
+            \textbf{Pros}
+            \begin{itemize}
+                \setbeamertemplate{itemize items}{\textcolor{green}{$\uparrow$}}
+                \item Reduces Code Size
+                \setbeamertemplate{itemize items}{\textcolor{green}{\textbf{\boldmath$\Uparrow$}}}
+                \item Removes Branches
+                \begin{itemize}
+                    \setbeamertemplate{itemize items}{\textcolor{green}{$\bullet$}}
+                    \item Removes branch misprediction penalty
+                    \item Improves IPC
+                    \item Makes execution time predictable
+                \end{itemize}
+            \end{itemize}
+
+        \column{0.5\textwidth}
+            \textbf{Cons}
+            \begin{itemize}
+                \setbeamertemplate{itemize items}{\textcolor{red}{$\uparrow$}}
+                \item Increases Code Size
+                \item Sometimes we need to execute more instructions
+                \begin{itemize}
+                    \setbeamertemplate{itemize items}{\textcolor{red}{$\bullet$}}
+                    \item Increases the I-Cache pressure
+                    \item Increase pressure on registers
+                \end{itemize}
+                \setbeamertemplate{itemize items}{\textcolor{red}{\textbf{\boldmath$\Uparrow$}}}
+                \item Makes the architecture more complex
+                \begin{itemize}
+                    \setbeamertemplate{itemize items}{\textcolor{red}{$\bullet$}}
+                    \item More area and power consumption
+                \end{itemize}
+                \setbeamertemplate{itemize items}{\textcolor{white}{\textbf{\boldmath$\Uparrow$}}}
+                \item \textcolor{white}{Does not interact positively with OOO}
+                
+                
+            \end{itemize}
+    \end{columns}
+    

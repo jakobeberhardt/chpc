@@ -15,20 +15,20 @@ computeLoan(bool, int):
     ldrb    r0, [r11, #-1]
     tst     r0, #1
     beq     .LBB0_2
-    ldr     r0, [sp, #8]
-    ldr     r1, .LCPI0_3
-    mul     r0, r0, r1
-    ldr     r1, .LCPI0_0
-    bl      __aeabi_idiv
-    str     r0, [sp, #4]
+    @ldr     r0, [sp, #8]
+    @@ldr     r1, .LCPI0_3
+    @@mul     r0, r0, r1
+    @@ldr     r1, .LCPI0_0
+    @@bl      __aeabi_idiv
+    @@str     r0, [sp, #4]
     b       .LBB0_3
 .LBB0_2:
-    ldr     r0, [sp, #8]
-    ldr     r1, .LCPI0_2
-    mul     r0, r0, r1
-    ldr     r1, .LCPI0_0
-    bl      __aeabi_idiv
-    str     r0, [sp, #4]
+    @@ldr     r0, [sp, #8]
+    @@ldr     r1, .LCPI0_2
+    @@mul     r0, r0, r1
+    @@ldr     r1, .LCPI0_0
+    @@bl      __aeabi_idiv
+    @@str     r0, [sp, #4]
 .LBB0_3:
     ldr     r0, [sp, #4]
     add     r0, r0, #5
@@ -61,11 +61,11 @@ computeLoan(bool, int):
     cmp     r0, #1
     mov     r1, r3
     movne   r1, r4
-    ldr     r0, [sp, #8]
-    mul     r0, r0, r1
-    ldr     r1, .LCPI0_0
-    bl      __aeabi_idiv
-    str     r0, [sp, #4]
+    @ldr     r0, [sp, #8]
+    @@mul     r0, r0, r1
+    @@ldr     r1, .LCPI0_0
+    @@bl      __aeabi_idiv
+    @@str     r0, [sp, #4]
     ldr     r0, [sp, #4]
     add     r0, r0, #5
     ldr     r1, .LCPI0_4
@@ -73,6 +73,6 @@ computeLoan(bool, int):
     ldr     r1, .LCPI0_4
     mul     r0, r0, r1
     mov     sp, r11
-    pop     {r11, pc} 
+    pop     {r11, pc}
     \end{lstlisting}
 \end{minipage}%

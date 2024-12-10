@@ -1,2 +1,2 @@
-# chpc
-Benchmarking Setup for Compilers for High Performance Computers
+# Predication and Speculation 
+Benchmarking setup for predication-enabled targets and profiling divergence in speculative code schedules

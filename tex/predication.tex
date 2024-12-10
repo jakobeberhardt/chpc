@@ -1,7 +1,7 @@
 \section{Predication}
 \label{sec:predication}
 
-For the reasons outlined in section \ref{sec:costo_of_branch_prediction}, we can conclude that branches are expensive. Even when using state-of-the-art branch predictors, certain branches are systematically hard to predict or have such low occurrences that not enough data are collected to perform a good prediction \cite{lin2019branch}.
+For the reasons outlined in Section \ref{sec:costo_of_branch_prediction}, we can conclude that branches are expensive. Even when using state-of-the-art branch predictors, certain branches are systematically hard to predict or have such low occurrences that not enough data are collected to perform a good prediction \cite{lin2019branch}.
 Predication is used to replace conditional branches with other instructions. In \textit{LLVM} and in \textit{GCC}, this is usually done during the backend optimization phase where the compiler works on the machine-level representation of the code. The name that is generally given to this code optimization pass is \texttt{if-conversion}.
 
 \begin{figure}[h!]
@@ -11,7 +11,7 @@ Predication is used to replace conditional branches with other instructions. In 
 \label{fig:branching_predication_example}
 \end{figure}
 
-An example of this is presented in figure \ref{fig:branching_predication_example} where code containing a conditional branch is replaced with code that performs exactly the same operation without the use of conditional branches. The example presented uses arithmetic properties to replace the branch and is usually referred to as \textit{Arithmetic Predication} or \textit{Branchless Programming}. Using Arithmetic Predication to replace branches presents limitations: multiplications are also expensive, and it is difficult to apply most of the time.
+An example of this is presented in Figure \ref{fig:branching_predication_example} where code containing a conditional branch is replaced with code that performs exactly the same operation without the use of conditional branches. The example presented uses arithmetic properties to replace the branch and is usually referred to as \textit{Arithmetic Predication} or \textit{Branchless Programming}. Using Arithmetic Predication to replace branches presents limitations: multiplications are also expensive, and it is difficult to apply most of the time.
 
 One way to overcome these limitations is by utilizing predicated instructions supported by the architecture when these are available. A predicated instruction in \armvs is an instruction that attaches conditions directly to instructions, allowing them to either execute or skip based on the condition's outcome. \newline
 
@@ -26,7 +26,7 @@ MOVGT R0, R1
 \end{lstlisting}
 \end{minipage}
 
-The \armvs architecture supports several predicated instructions. For example, the standard \texttt{MOV} instructions in listing \ref{lst:add} takes the value in \texttt{R1} and moves it into \texttt{R0} while, the predicated version, \texttt{MOVGT}, showed in listing \ref{lst:cadd} moves the value in \texttt{R1} to \texttt{R0} only when the last comparison was "greater than". \\
+The \armvs architecture supports several predicated instructions. For example, the standard \texttt{MOV} instructions in Listing \ref{lst:add} takes the value in \texttt{R1} and moves it into \texttt{R0} while, the predicated version, \texttt{MOVGT}, showed in Listing \ref{lst:cadd} moves the value in \texttt{R1} to \texttt{R0} only when the last comparison was "greater than". \\
 
 \begin{figure}[h!]
 \centering
@@ -35,7 +35,7 @@ The \armvs architecture supports several predicated instructions. For example, t
 \label{fig:branching_predication_ARM}
 \end{figure}
 
-In figure \ref{fig:branching_predication_ARM} two assembly translations of the code in Figure \ref{fig:branching_predication_example} are displayed. The top one is when no predication is used, while the bottom one uses predicated instructions.
+In Figure \ref{fig:branching_predication_ARM} two assembly translations of the code in Figure \ref{fig:branching_predication_example} are displayed. The top one is when no predication is used, while the bottom one uses predicated instructions.
 By comparing the two versions in Figure \ref{fig:branching_predication_ARM}, the benefits of predication are staggering. The code size is reduced from five instructions to three while removing one conditional branch and one unconditional branch. Another benefit that is outlined by this example is \textit{Deterministic Execution}. It's difficult to predict how many cycles an assembly code needs to be executed when branch predictions and other forms of speculations are involved. As we removed all the branches and as we have no memory accesses in our snippet of code, we can determine exactly how long it's going to take to execute the operation. Deterministic Execution is crucial in certain fields where the software needs to have predictable behavior and respond within strict timing constraints. This is necessary for instance in flight control systems, medical devices, and other mission-critical software.
 Section \ref{sec:arch_support} focuses on a more in-depth analysis of how \armvs and \texttt{IA64} architectures introduce support for predication. It is also necessary to mention some limitations of predication.
 \begin{itemize}
@@ -44,7 +44,7 @@ Section \ref{sec:arch_support} focuses on a more in-depth analysis of how \armvs
     \item \textit{Code Size}: While the example presented,  demonstrates how predication can result in code size reduction, this is not necessarily the case. In fact, as a more complex control flow is taken into account, code size is more likely to increment.
 \end{itemize}
 
-For these reasons, if predication is applied indiscriminately, performance regression happens. Production compilers like \textit{LLVM} and \textit{GCC} use heuristics to decide at compile time whether predication is beneficial or not. In subsection \ref{sec:compiler_heuristics} we will treat this in more detail reporting and analyzing some of these heuristics. Finding whether predication is applicable is per se a challenge. The logic that \textit{LLVM} uses to find basic blocks where predication is applicable is reported in subsection \ref{sec:detecting_pred} while Subsection \ref{sec:limitations} talks about compilers' limitation and shows an example where \textit{LLVM} fails to identify \textit{if-conversion}. Lastly, in subsection \ref{sec:predication_benchmark}, a series of micro-benchmarks will be proposed to showcase in which cases and what impact \textit{if-conversion} has.
+For these reasons, if predication is applied indiscriminately, performance regression happens. Production compilers like \textit{LLVM} and \textit{GCC} use heuristics to decide at compile time whether predication is beneficial or not. In Subsection \ref{sec:compiler_heuristics} we will treat this in more detail reporting and analyzing some of these heuristics. Finding whether predication is applicable is per se a challenge. The logic that \textit{LLVM} uses to find basic blocks where predication is applicable is reported in Subsection \ref{sec:detecting_pred} while Subsection \ref{sec:limitations} talks about compilers' limitation and shows an example where \textit{LLVM} fails to identify \textit{if-conversion}. Lastly, in Subsection \ref{sec:predication_benchmark}, a series of micro-benchmarks will be proposed to showcase in which cases and what impact \textit{if-conversion} has.
 
 \subsection{How is Predication Achieved in the Architecture}
 \label{sec:arch_support}
@@ -60,7 +60,7 @@ When the CPU encounters a predicated instruction, it evaluates the condition fie
     \label{fig:mov_encoding}
 \end{figure}
 
-In figure \ref{fig:mov_encoding} we can observe how \texttt{MOV} and \texttt{MOVG} bit encoding only differ for the first four bits. The condition field in \armvs applies to almost all instructions. In ARM's architecture, most instructions have a 4-bit condition field. This makes non-predicated instructions a particular case of predication where the condition field is set to \texttt{1110}. \\
+In Figure \ref{fig:mov_encoding} we can observe how \texttt{MOV} and \texttt{MOVG} bit encoding only differ for the first four bits. The condition field in \armvs applies to almost all instructions. In ARM's architecture, most instructions have a 4-bit condition field. This makes non-predicated instructions a particular case of predication where the condition field is set to \texttt{1110}. \\
 
 Another architecture design that offers predication support is the Itanium \texttt{IA-64}.
 The \texttt{IA-64} has 64 predicate registers (\texttt{p0} to \texttt{63}) that allow each instruction to be conditionally executed based on specific predicate values. Each instruction can specify a predicate register, offering highly granular control over conditional execution. Using this, approach, entire sections of code can be totally predicated, minimizing the dependency on branch predictors.
@@ -71,7 +71,7 @@ The \texttt{IA-64} has 64 predicate registers (\texttt{p0} to \texttt{63}) that 
 \end{minipage}
 \end{center}
 
-In listing~\ref{lst:itanium_predicated}, it is possible to see the \texttt{IA-64} equivalent of the assembly code showed in listing \ref{fig:branching_predication_ARM}.
+In Listing~\ref{lst:itanium_predicated}, it is possible to see the \texttt{IA-64} equivalent of the assembly code showed in Listing \ref{fig:branching_predication_ARM}.
 
 It is important to mention that no modern \textit{ISA} has a predication support that is as central as \texttt{ARMv7}. If we look at \texttt{x86}, \texttt{RISC-V} and even the more recent version of \texttt{ARM} such as \texttt{ARMv8} and \texttt{ARMv9}, none of them decided to give predication such a central role.
 This may prove that there are better architectural choices that grant higher performances than such extensive predication support.
@@ -120,7 +120,7 @@ When a \textit{Triangular Branch} is identified when using \textit{ARMv7} as the
 
 The number of instructions to be predicated is determined by counting the number of instructions in the TIB and in the FIB. Each instruction in these ranges is counted, incrementing the \texttt{NumPredicatedInstructions} variable. If the total number of predicated instructions exceeds a predefined threshold of 15, the function decides not to proceed with predication, ensuring that excessively large predicated blocks are avoided to maintain efficiency.
 
-In the case of the \textit{Triangular Branch}, the FIB is common to both branches, therefore the size only depends on the number of instructions in the TIB. In figure \ref{fig:triangle_asm}, the before and after in machine code is shown for the code provided in figure \ref{fig:triangle_branch}
+In the case of the \textit{Triangular Branch}, the FIB is common to both branches, therefore the size only depends on the number of instructions in the TIB. In Figure \ref{fig:triangle_asm}, the before and after in machine code is shown for the code provided in Figure \ref{fig:triangle_branch}
 
 \begin{figure}[H]
     \centering
@@ -135,7 +135,7 @@ Three other patterns exist: \textit{Diamond}, \textit{Forked Diamond} and \texti
 \subsection{Compiler's Heuristics}
 \label{sec:compiler_heuristics}
 
-As demonstrated in section \ref{sec:predication} and highlighted by August et al. \cite{August98}, indiscriminate use of predication leads to performance degradation.
+As demonstrated in Section \ref{sec:predication} and highlighted by August et al. \cite{August98}, indiscriminate use of predication leads to performance degradation.
 To determine whether to apply this technique, modern compilers rely on heuristics. The heuristics are highly architecture-dependent, as illustrated in Table \ref{tab:misprediction_penalty}. In the rest of this section, the heuristics used by the production state-of-the-art compiler \textit{LLVM} is described.
 
 Section \ref{sec:detecting_pred} already introduced that, when analyzing a block for \textit{if-conversion} the possible cost is computed. The cost of predicating a Basic Block consists of two components: architecture-dependent predication cost and instruction latency. These costs vary based on the specific instruction and the architecture. Some architectures impose a fixed cost for predicating any instruction, while others either avoid this cost entirely or apply it selectively to certain instructions. Importantly, the cost of predication associated with each instruction is not arbitrarily defined by the compiler but instead reflects the actual cost of executing the instruction on the target architecture. Taking as reference the \texttt{ARMv7} architecture, calls have an additional latency of 1 cycle to be predicated, while predicating any other instruction does not introduce any additional cost. It's important to note that compared to other architectures, predication in \texttt{ARMv7} is a central part of the architecture and therefore using it does not present relevant overheads.
@@ -148,7 +148,7 @@ Section \ref{sec:detecting_pred} already introduced that, when analyzing a block
 \end{figure}
 
 The impact of predication can be both positive and negative on the number of cycles needed to execute a function. When the cost is negative, we always choose to apply the \textit{if-conversion} transformation. On the other hand, having a positive cost does not automatically rule out predication. Instead, we apply a further heuristic that takes into account the cost of misprediction.
-The logic to perform the cost analysis of predication is in the function \texttt{ScanInstruction} which is partially reported in listing \ref{lst:predication_cost}
+The logic to perform the cost analysis of predication is in the function \texttt{ScanInstruction} which is partially reported in Listing \ref{lst:predication_cost}
 
 \begin{figure}[H]
     \centering
@@ -166,7 +166,7 @@ The cost used in \texttt{isProfitableToIfCvt} are:
     \item \textbf{FExtra}: Additional cost (in cycles) for predicating the "False" block.
 \end{itemize}
 
-The actual cost of predication is calculated on line 15 of listing \ref{lst:predications_heuristic}:
+The actual cost of predication is calculated on line 15 of Listing \ref{lst:predications_heuristic}:
 \[
 \text{PredCost} = (\text{TCycles} + \text{FCycles} + \text{TExtra} + \text{FExtra})
 \]
@@ -199,7 +199,7 @@ It's worth mentioning that these are also the cases where predication tends to p
 
 The first example presented in this section is the function \texttt{computeLoan}. This function and the corresponding Control Flow Graph are visible in Figure \ref{fig:calculate_loan}. This particular CFG shape is referred to as \textit{Diamond}.
 
-When compiled with \texttt{-O0}, the resulting assembly code is visible in figure \ref{fig:calculate_loan_asm}, side by side with the corresponding \textit{if-converted} code.
+When compiled with \texttt{-O0}, the resulting assembly code is visible in Figure \ref{fig:calculate_loan_asm}, side by side with the corresponding \textit{if-converted} code.
 
 \begin{figure}[H]
     \centering
@@ -208,13 +208,16 @@ When compiled with \texttt{-O0}, the resulting assembly code is visible in figur
     \label{fig:calculate_loan_asm}
 \end{figure}
 
-As in the \texttt{ARMv7} architecture predication plays a central role, predicated instructions are used on both sides of the assembly translation shown in figure \ref{fig:calculate_loan_asm}. On the left side, \texttt{tst}, \texttt{beq} and \texttt{b} implement the branch at the end of the \textit{EBB} block.
+%FORMAT
+\newpage
+
+As in the \texttt{ARMv7} architecture predication plays a central role, predicated instructions are used on both sides of the assembly translation shown in Figure \ref{fig:calculate_loan_asm}. On the left side, \texttt{tst}, \texttt{beq} and \texttt{b} implement the branch at the end of the \textit{EBB} block.
 The instruction \texttt{tst} checks the least significant bit of \texttt{r0} (which contains the boolean value). The result of this test determines whether the branch will be taken or not by the instructions \texttt{beq}.
 
 In the \textit{if-converted} code, the branches are totally removed, and the code becomes branchless. This is, as expected, done using predicated instructions. In particular, the region where this is done is highlighted on the right part of Figure \ref{fig:calculate_loan_asm}.
 The instruction \texttt{cmp} is used to perform a comparison and set the special registers. The instruction \texttt{mov} will be executed in any case, but, \texttt{movne} will only be executed if the result of \texttt{cmp} is not equal. When this is the case, the changes made by \texttt{mov} will be overwritten.
 
-The second example is the function \texttt{processOrder} which is displayed with the corresponding CFG in figure \ref{fig:processOrder}. This CFG shape takes the name of \textit{Forked Diamond}.
+The second example is the function \texttt{processOrder} which is displayed with the corresponding CFG in Figure \ref{fig:processOrder}. This CFG shape takes the name of \textit{Forked Diamond}.
 
 \begin{figure}[H]
     \centering
@@ -239,7 +242,7 @@ In Figure \ref{fig:process_order_asm} it's possible to see the basic and the \te
     \label{fig:benchmarks}
 \end{figure}
 
-The \textit{IPC} and \textit{total cycle} comparison of the two examples provided are showcased in figure \ref{fig:benchmarks}. From this, we can conclude that not only do the \textit{if-converted} versions have a higher \textit{IPC}, they are also shorter and therefore use a much lower number of \textit{Total Cycles}. 
+The \textit{IPC} and \textit{total cycle} comparison of the two examples provided are showcased in Figure \ref{fig:benchmarks}. From this, we can conclude that not only do the \textit{if-converted} versions have a higher \textit{IPC}, they are also shorter and therefore use a much lower number of \textit{Total Cycles}. 
 
 The compiler heuristics mentioned in Section \ref{sec:compiler_heuristics} and the benchmarks reported in this section point out that whenever we face a \textit{CFG} with the shape of \textit{Diamond}, \textit{Forked Diamond} and \textit{Triangle}, applying \textit{if-conversion} results in improved performances.
 
@@ -249,7 +252,7 @@ In the examples reported in Section \ref{sec:predication_benchmark}, \textit{LLV
 The main reason for which performances are left on the table by compilers is because they fail to identify cases where \textit{if-conversion} could be applied.
 
 An example of this can be crafted starting from the \texttt{computeLoan} example shown in Section \ref{sec:predication_benchmark}. As shown in the previous section, this is a perfect case to apply \textit{if-conversion} and this optimization results in a noticeable performance improvement.
-Still, when the number of instructions and the complexity grows, compilers stop applying predication as the predicated block exceeds the size limit discussed in section \ref{sec:compiler_heuristics}. The new version of  \texttt{computeLoan} is referenced as \texttt{expandedComputeLoan} and is reported in Figure \ref{lst:expanded_compute_loan}, the performance measured for the \texttt{-O0} version is compared with a version where the \textit{if-conversion} optimization is applied manually. The corresponding assembly code is provided in appendix \ref{app:first}. From the figure, we can see that even though the compiler decided not to apply this optimization, applying still results in a great performance improvement as it is possible to see in Figure \ref{fig:compute_loan_ipc}.
+Still, when the number of instructions and the complexity grows, compilers stop applying predication as the predicated block exceeds the size limit discussed in Section \ref{sec:compiler_heuristics}. The new version of  \texttt{computeLoan} is referenced as \texttt{expandedComputeLoan} and is reported in Figure \ref{lst:expanded_compute_loan}, the performance measured for the \texttt{-O0} version is compared with a version where the \textit{if-conversion} optimization is applied manually. The corresponding assembly code is provided in appendix \ref{app:first}. From the Figure, we can see that even though the compiler decided not to apply this optimization, applying still results in a great performance improvement as it is possible to see in Figure \ref{fig:compute_loan_ipc}.
 
 \begin{figure}[h]
     \input{src/listing/expanded_compute_loan_ls}
@@ -263,6 +266,6 @@ Still, when the number of instructions and the complexity grows, compilers stop 
     \label{fig:compute_loan_ipc}
 \end{figure}
 
-The heuristics used by the compilers, and described in section \ref{sec:compiler_heuristics}, are designed to be general and provide good results in most scenarios, the compiler's knowledge at compile time is inherently limited, and applying more complex optimization would require more compilation time.
+The heuristics used by the compilers, and described in Section \ref{sec:compiler_heuristics}, are designed to be general and provide good results in most scenarios, the compiler's knowledge at compile time is inherently limited, and applying more complex optimization would require more compilation time.
 
 \newpage
